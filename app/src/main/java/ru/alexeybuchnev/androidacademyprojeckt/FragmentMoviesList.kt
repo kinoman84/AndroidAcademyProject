@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -47,8 +48,15 @@ class FragmentMoviesList : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         val view: View = inflater.inflate(R.layout.fragment_movies_list, container, false)
         view.findViewById<Button>(R.id.button).apply {
+            setOnClickListener { _ ->
+                callbacks?.onFilmSelectedClick("filmName")
+            }
+        }
+
+        view.findViewById<CardView>(R.id.filmItemCardView).apply {
             setOnClickListener { _ ->
                 callbacks?.onFilmSelectedClick("filmName")
             }

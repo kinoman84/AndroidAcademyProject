@@ -116,47 +116,46 @@
             android:layout_width="13.2dp"
             android:layout_height="12dp"
             android:layout_marginLeft="3.25dp"
-            android:layout_marginTop="8dp"
             android:background="@drawable/ic_star_icon_on"
+            app:layout_constraintBottom_toBottomOf="@+id/star1"
             app:layout_constraintStart_toEndOf="@id/star1"
-            app:layout_constraintTop_toBottomOf="@id/tagsTextView" />
+            app:layout_constraintTop_toTopOf="@+id/star1" />
 
         <View
             android:id="@+id/star3"
             android:layout_width="13.2dp"
             android:layout_height="12dp"
             android:layout_marginLeft="3.25dp"
-            android:layout_marginTop="8dp"
             android:background="@drawable/ic_star_icon_on"
+            app:layout_constraintBottom_toBottomOf="@+id/star2"
             app:layout_constraintStart_toEndOf="@id/star2"
-            app:layout_constraintTop_toBottomOf="@id/tagsTextView" />
+            app:layout_constraintTop_toTopOf="@+id/star2" />
 
         <View
             android:id="@+id/star4"
             android:layout_width="13.2dp"
             android:layout_height="12dp"
             android:layout_marginLeft="3.25dp"
-            android:layout_marginTop="8dp"
             android:background="@drawable/ic_star_icon_on"
+            app:layout_constraintBottom_toBottomOf="@+id/star3"
             app:layout_constraintStart_toEndOf="@id/star3"
-            app:layout_constraintTop_toBottomOf="@id/tagsTextView" />
+            app:layout_constraintTop_toTopOf="@+id/star3" />
 
         <View
             android:id="@+id/star5"
             android:layout_width="13.2dp"
             android:layout_height="12dp"
             android:layout_marginLeft="3.25dp"
-            android:layout_marginTop="8dp"
             android:background="@drawable/ic_star_icon_off"
+            app:layout_constraintBottom_toBottomOf="@+id/star4"
             app:layout_constraintStart_toEndOf="@id/star4"
-            app:layout_constraintTop_toBottomOf="@id/tagsTextView" />
+            app:layout_constraintTop_toTopOf="@+id/star4" />
 
         <TextView
             android:id="@+id/reviewersTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8.89dp"
-            android:layout_marginTop="4dp"
             android:lineHeight="20dp"
             android:text="125 Reviews"
             android:textAlignment="textStart"
@@ -164,8 +163,9 @@
             android:textColor="#6D6D80"
             android:textSize="14sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/star5"
             app:layout_constraintStart_toEndOf="@id/star5"
-            app:layout_constraintTop_toBottomOf="@id/tagsTextView" />
+            app:layout_constraintTop_toTopOf="@+id/star5" />
 
         <TextView
             android:id="@+id/storylineTitleTextView"
