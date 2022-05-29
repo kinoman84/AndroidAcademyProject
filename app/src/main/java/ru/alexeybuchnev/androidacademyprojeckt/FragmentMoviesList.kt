@@ -50,11 +50,6 @@ class FragmentMoviesList : Fragment() {
     ): View? {
 
         val view: View = inflater.inflate(R.layout.fragment_movies_list, container, false)
-        view.findViewById<Button>(R.id.button).apply {
-            setOnClickListener { _ ->
-                callbacks?.onFilmSelectedClick("filmName")
-            }
-        }
 
         view.findViewById<CardView>(R.id.filmItemCardView).apply {
             setOnClickListener { _ ->
