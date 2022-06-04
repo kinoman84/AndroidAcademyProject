@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -51,13 +53,22 @@ class FragmentMoviesList : Fragment() {
 
         val view: View = inflater.inflate(R.layout.fragment_movies_list, container, false)
 
-        view.findViewById<CardView>(R.id.filmItemCardView).apply {
+        //TODO перенести клик листенер в адаптер FilmsAdapter
+        /*view.findViewById<CardView>(R.id.filmItemCardView).apply {
             setOnClickListener { _ ->
                 callbacks?.onFilmSelectedClick("filmName")
             }
-        }
+        }*/
         // Inflate the layout for this fragment
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val filmsListRecyclerView: RecyclerView = view.findViewById(R.id.filmsListRecyclerView)
+        filmsListRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        filmsListRecyclerView.adapter = FilmsAdapter(callbacks)
+        filmsListRecyclerView.setHasFixedSize(true)
+
     }
 
     companion object {

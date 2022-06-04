@@ -217,7 +217,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/storylineContentTextView" />
 
-        <androidx.cardview.widget.CardView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/actorsRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/castTitleTextView"/>
+
+
+        <!--androidx.cardview.widget.CardView
             android:id="@+id/castCardView1"
             android:layout_width="wrap_content"
             android:layout_height="80dp"
@@ -331,7 +343,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/castCardView4"
             app:layout_constraintStart_toStartOf="@+id/castCardView4"
-            app:layout_constraintTop_toBottomOf="@id/castCardView4" />
+            app:layout_constraintTop_toBottomOf="@id/castCardView4" /-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
