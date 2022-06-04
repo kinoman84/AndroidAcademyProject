@@ -152,7 +152,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/filmNameTextView"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_width="wrap_content"
@@ -166,8 +166,8 @@
             android:textStyle="bold" />
 
         <TextView
-            app:layout_constraintStart_toStartOf="@+id/textView3"
-            app:layout_constraintTop_toBottomOf="@+id/textView3"
+            app:layout_constraintStart_toStartOf="@+id/filmNameTextView"
+            app:layout_constraintTop_toBottomOf="@+id/filmNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="137 min"

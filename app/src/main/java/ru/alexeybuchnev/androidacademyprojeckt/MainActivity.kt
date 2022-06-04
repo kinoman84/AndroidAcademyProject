@@ -19,8 +19,8 @@ class MainActivity : AppCompatActivity(), FragmentMoviesList.Callbacks {
         }
     }
 
-    override fun onFilmSelectedClick(filmName: String) {
-        val fragmentMoviesDetails = FragmentMoviesDetails.newInstance("","")
+    override fun onFilmSelectedClick(filmIndex: Int) {
+        val fragmentMoviesDetails = FragmentMoviesDetails.newInstance(filmIndex)
         supportFragmentManager
             .beginTransaction()
             .add(R.id.fragment_container, fragmentMoviesDetails)

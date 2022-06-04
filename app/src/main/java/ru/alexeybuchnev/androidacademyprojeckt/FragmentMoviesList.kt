@@ -29,7 +29,7 @@ class FragmentMoviesList : Fragment() {
     private var callbacks: Callbacks? = null
 
     interface Callbacks {
-        fun onFilmSelectedClick(filmName: String)
+        fun onFilmSelectedClick(filmIndex: Int)
     }
 
     override fun onAttach(context: Context) {
@@ -66,7 +66,7 @@ class FragmentMoviesList : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val filmsListRecyclerView: RecyclerView = view.findViewById(R.id.filmsListRecyclerView)
         filmsListRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        filmsListRecyclerView.adapter = FilmsAdapter(callbacks)
+        filmsListRecyclerView.adapter = FilmsAdapter(callbacks).apply { bindFilms(Film.films) }
         filmsListRecyclerView.setHasFixedSize(true)
 
     }
