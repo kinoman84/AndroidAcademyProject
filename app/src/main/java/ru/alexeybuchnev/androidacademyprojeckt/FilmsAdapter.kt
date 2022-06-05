@@ -1,8 +1,11 @@
 package ru.alexeybuchnev.androidacademyprojeckt
 
+import android.content.res.Resources
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
@@ -16,7 +19,6 @@ class FilmsAdapter(val clickListener: FragmentMoviesList.Callbacks?) : RecyclerV
 
     override fun onBindViewHolder(holder: FilmListItemViewHolder, position: Int) {
         holder.itemView.setOnClickListener {_ ->
-            //TODO предавать id фильма
             clickListener?.onFilmSelectedClick(position)
         }
 
@@ -33,13 +35,16 @@ class FilmsAdapter(val clickListener: FragmentMoviesList.Callbacks?) : RecyclerV
 }
 
 class FilmListItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
     private lateinit var film: Film
 
-    private val filmNameTextView = itemView.findViewById<TextView>(R.id.filmNameTextView)
+    private val filmNameTextView: TextView = itemView.findViewById(R.id.filmNameTextView)
+    private var filmPosterImageView: ImageView = itemView.findViewById(R.id.filmPosterImageView)
 
     fun bindFilm(film: Film) {
         this.film = film
         filmNameTextView.text = film.name
+        filmPosterImageView.setImageResource(film.imageResourceId)
     }
 
 }

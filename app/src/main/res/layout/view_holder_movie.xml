@@ -14,21 +14,21 @@
         android:background="@drawable/film_list_item_background">
 
         <ImageView
-            android:id="@+id/filmItemImageView"
+            android:id="@+id/filmPosterImageView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:adjustViewBounds="true"
-            android:src="@drawable/movie_list_item" />
+            tools:src="@drawable/film_poster_avenges_end_game" />
 
         <View
             android:id="@+id/posterImageView"
-            app:layout_constraintBottom_toBottomOf="@id/filmItemImageView"
-            app:layout_constraintEnd_toEndOf="@id/filmItemImageView"
-            app:layout_constraintStart_toStartOf="@id/filmItemImageView"
-            app:layout_constraintTop_toTopOf="@id/filmItemImageView"
+            app:layout_constraintBottom_toBottomOf="@id/filmPosterImageView"
+            app:layout_constraintEnd_toEndOf="@id/filmPosterImageView"
+            app:layout_constraintStart_toStartOf="@id/filmPosterImageView"
+            app:layout_constraintTop_toTopOf="@id/filmPosterImageView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@drawable/film_list_item_gradient" />
@@ -59,7 +59,7 @@
 
         <TextView
             android:id="@+id/tagsTextView"
-            app:layout_constraintBottom_toBottomOf="@+id/filmItemImageView"
+            app:layout_constraintBottom_toBottomOf="@+id/filmPosterImageView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_width="0dp"

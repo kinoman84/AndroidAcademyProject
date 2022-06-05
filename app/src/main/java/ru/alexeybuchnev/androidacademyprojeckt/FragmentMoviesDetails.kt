@@ -45,7 +45,7 @@ class FragmentMoviesDetails : Fragment() {
         val actorsRecyclerView: RecyclerView = view.findViewById(R.id.actorsRecyclerView)
         actorsRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        actorsRecyclerView.adapter = ActorAdapter()
+        actorsRecyclerView.adapter = ActorAdapter(selectedFilm.actors)
         actorsRecyclerView.setHasFixedSize(true)
     }
 

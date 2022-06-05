@@ -3,11 +3,11 @@ package ru.alexeybuchnev.androidacademyprojeckt
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class ActorAdapter : RecyclerView.Adapter<ActorItemViewHolder>() {
-
-    val actorsList = arrayListOf(1, 2, 3, 4, 5)
+class ActorAdapter(val actorsList: List<Actor>) : RecyclerView.Adapter<ActorItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActorItemViewHolder {
         val view: View = LayoutInflater.from(parent.context)
@@ -17,7 +17,7 @@ class ActorAdapter : RecyclerView.Adapter<ActorItemViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ActorItemViewHolder, position: Int) {
-
+        holder.bindActor(actorsList[position])
     }
 
     override fun getItemCount(): Int {
@@ -26,5 +26,15 @@ class ActorAdapter : RecyclerView.Adapter<ActorItemViewHolder>() {
 }
 
 class ActorItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    private lateinit var actor: Actor
+
+    private val actorImageView: ImageView = view.findViewById(R.id.actorImageView)
+    private val actorNameTextView: TextView = view.findViewById(R.id.actorNameTextView)
+
+    fun bindActor(actor: Actor) {
+        this.actor = actor
+        actorImageView.setImageResource(actor.imageResourceId)
+        actorNameTextView.text = actor.name
+    }
 
 }

@@ -12,22 +12,32 @@
         tools:context=".MovieDetailsActivity">
 
         <ImageView
-            android:id="@+id/maskImageView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:id="@+id/filmPosterImageView"
+            android:layout_width="0dp"
+            android:layout_height="298dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/mask"
+            android:src="@drawable/film_poster_avenges_end_game"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/film_details_poster_filter"
+            app:layout_constraintTop_toTopOf="@id/filmPosterImageView"
+            app:layout_constraintBottom_toBottomOf="@id/filmPosterImageView"
+            app:layout_constraintStart_toStartOf="@id/filmPosterImageView"
+            app:layout_constraintEnd_toEndOf="@id/filmPosterImageView"/>
+
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/maskBarrier"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="maskImageView"
+            app:constraint_referenced_ids="filmPosterImageView"
             tools:layout_editor_absoluteY="291dp" />
 
         <TextView
