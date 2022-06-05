@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +17,7 @@ class FragmentMoviesDetails : Fragment() {
     private var selectedFilmIndex: Int? = null
     private lateinit var selectedFilm: Film
     private lateinit var filmNameTextView: TextView
+    private lateinit var filmPosterImageView: ImageView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +43,10 @@ class FragmentMoviesDetails : Fragment() {
 
         filmNameTextView = view.findViewById(R.id.filmNameTextView)
         filmNameTextView.text = selectedFilm.name
+
+        filmPosterImageView = view.findViewById(R.id.filmPosterImageView)
+        filmPosterImageView.setImageResource(selectedFilm.imageResourceId)
+
 
         val actorsRecyclerView: RecyclerView = view.findViewById(R.id.actorsRecyclerView)
         actorsRecyclerView.layoutManager =

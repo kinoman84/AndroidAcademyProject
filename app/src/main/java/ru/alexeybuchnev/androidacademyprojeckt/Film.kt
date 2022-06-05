@@ -27,39 +27,58 @@ data class Film(
                     Actor.actorsMap.getValue("robert_downey_jr"),
                     Actor.actorsMap.getValue("chris_evans"),
                     Actor.actorsMap.getValue("mark_ruffalo"),
-                    Actor.actorsMap.getValue("chris_hemsworth")
+                    Actor.actorsMap.getValue("chris_hemsworth"),
+                    Actor.actorsMap.getValue("scarlett_johansson")
                 )
             ),
             Film(
                 "Tenet",
-                R.drawable.film_poster_avenges_end_game,
+                R.drawable.film_poster_tenet,
                 listOf("Action", "Adventure", "Drama"),
                 13,
                 4,
                 125,
-                135
+                135,
+                actors = listOf(
+                    Actor.actorsMap.getValue("robert_pattinson"),
+                    Actor.actorsMap.getValue("elizabeth_debicki"),
+                    Actor.actorsMap.getValue("john_david_washington"),
+                    Actor.actorsMap.getValue("kenneth_branagh")
+                )
             ),
             Film(
                 "Black Widow",
-                R.drawable.film_poster_avenges_end_game,
+                R.drawable.film_poster_black_widow,
                 listOf("Action", "Adventure", "Drama"),
                 13,
                 4,
                 125,
-                108
+                108,
+                actors = listOf(
+                    Actor.actorsMap.getValue("scarlett_johansson"),
+                    Actor.actorsMap.getValue("florence_pugh"),
+                    Actor.actorsMap.getValue("david_harbour"),
+                    Actor.actorsMap.getValue("rachel_weisz")
+                )
             ),
             Film(
                 "Wonder Woman 1984",
-                R.drawable.film_poster_avenges_end_game,
+                R.drawable.film_poster_wonder_woman_1984,
                 listOf("Action", "Adventure", "Drama"),
                 13,
                 4,
                 125,
-                117
+                117,
+                actors = listOf(
+                    Actor.actorsMap.getValue("gal_gadot"),
+                    Actor.actorsMap.getValue("chris_pine"),
+                    Actor.actorsMap.getValue("kristen_wiig"),
+                    Actor.actorsMap.getValue("pedro_pascal")
+                )
             ),
             Film(
                 "The Terminator",
-                R.drawable.film_poster_avenges_end_game,
+                R.drawable.film_poster_terminator,
                 listOf("Action", "Adventure", "Drama"),
                 13,
                 4,
@@ -67,8 +86,8 @@ data class Film(
                 98
             ),
             Film(
-                "Rambo",
-                R.drawable.film_poster_avenges_end_game,
+                "Rocky",
+                R.drawable.film_poster_rocky,
                 listOf("Action", "Adventure", "Drama"),
                 13,
                 4,
