@@ -1,7 +1,5 @@
 package ru.alexeybuchnev.androidacademyprojeckt
 
-import android.content.res.Resources
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,8 +36,8 @@ class FilmListItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     private lateinit var film: Film
 
-    private val filmNameTextView: TextView = itemView.findViewById(R.id.filmNameTextView)
-    private var filmPosterImageView: ImageView = itemView.findViewById(R.id.filmPosterImageView)
+    private val filmNameTextView: TextView = itemView.findViewById(R.id.movie_name_text)
+    private var filmPosterImageView: ImageView = itemView.findViewById(R.id.movie_logo_image)
 
     fun bindFilm(film: Film) {
         this.film = film

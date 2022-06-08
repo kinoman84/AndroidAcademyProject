@@ -41,10 +41,10 @@ class FragmentMoviesDetails : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        filmNameTextView = view.findViewById(R.id.filmNameTextView)
+        filmNameTextView = view.findViewById(R.id.movie_name_text)
         filmNameTextView.text = selectedFilm.name
 
-        filmPosterImageView = view.findViewById(R.id.filmPosterImageView)
+        filmPosterImageView = view.findViewById(R.id.movie_logo_image)
         filmPosterImageView.setImageResource(selectedFilm.imageResourceId)
 
 
