@@ -2,6 +2,7 @@ package ru.alexeybuchnev.androidacademyprojeckt
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import kotlinx.serialization.Serializable
 
 class MainActivity : AppCompatActivity(), FragmentMoviesList.Callbacks {
 
