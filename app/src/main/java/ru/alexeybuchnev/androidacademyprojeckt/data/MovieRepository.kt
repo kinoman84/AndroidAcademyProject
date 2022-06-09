@@ -1,13 +1,13 @@
 package com.android.academy.fundamentals.homework.data
 
 import android.content.Context
-import com.android.academy.fundamentals.homework.model.Actor
-import com.android.academy.fundamentals.homework.model.Genre
-import com.android.academy.fundamentals.homework.model.Movie
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import ru.alexeybuchnev.androidacademyprojeckt.model.Actor
+import ru.alexeybuchnev.androidacademyprojeckt.model.Genre
+import ru.alexeybuchnev.androidacademyprojeckt.model.Movie
 
 interface MovieRepository {
     suspend fun loadMovies(): List<Movie>
