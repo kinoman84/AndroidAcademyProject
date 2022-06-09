@@ -6,11 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.Toast
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.android.academy.fundamentals.homework.data.JsonMovieRepository
+import com.android.academy.fundamentals.homework.data.MovieRepository
+import kotlinx.coroutines.*
+import ru.alexeybuchnev.androidacademyprojeckt.model.Movie
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,6 +28,9 @@ class FragmentMoviesList : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private var callbacks: Callbacks? = null
+
+    private var scope = CoroutineScope(Job() + Dispatchers.Default)
+    private lateinit var filmsListRecyclerView: RecyclerView
 
     interface Callbacks {
         fun onFilmSelectedClick(filmIndex: Int)
@@ -64,12 +68,27 @@ class FragmentMoviesList : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val filmsListRecyclerView: RecyclerView = view.findViewById(R.id.filmsListRecyclerView)
+        filmsListRecyclerView = view.findViewById(R.id.filmsListRecyclerView)
+
+        val movieRepository: MovieRepository = JsonMovieRepository(requireContext())
+
+
+        scope.launch {
+            var filmsList: List<Movie>
+            filmsList = movieRepository.loadMovies()
+            updateFilmList(filmsList)
+        }
+
         filmsListRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        filmsListRecyclerView.adapter = FilmsAdapter(callbacks).apply { bindFilms(Film.films) }
-        filmsListRecyclerView.setHasFixedSize(true)
+
 
     }
+
+    private suspend fun updateFilmList(moviesList: List<Movie>) = withContext(Dispatchers.Main){
+        filmsListRecyclerView.adapter = FilmsAdapter(callbacks).apply { bindMovies(moviesList) }
+    }
+
+
 
     companion object {
         /**

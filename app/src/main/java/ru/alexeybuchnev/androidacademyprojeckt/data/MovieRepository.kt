@@ -14,7 +14,7 @@ interface MovieRepository {
     suspend fun loadMovie(movieId: Int): Movie?
 }
 
-internal class JsonMovieRepository(private val context: Context) : MovieRepository {
+class JsonMovieRepository(private val context: Context) : MovieRepository {
     private val jsonFormat = Json { ignoreUnknownKeys = true }
 
     private var movies: List<Movie>? = null
