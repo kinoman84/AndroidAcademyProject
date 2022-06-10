@@ -33,7 +33,7 @@
 
 
         <ImageView
-            android:id="@+id/movie_logo_image"
+            android:id="@+id/film_poster_image_view"
             android:layout_width="0dp"
             android:layout_height="298dp"
             android:scaleType="centerCrop"
@@ -47,10 +47,10 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@drawable/ic_mask"
-            app:layout_constraintBottom_toBottomOf="@id/movie_logo_image"
-            app:layout_constraintEnd_toEndOf="@id/movie_logo_image"
-            app:layout_constraintStart_toStartOf="@id/movie_logo_image"
-            app:layout_constraintTop_toTopOf="@id/movie_logo_image" />
+            app:layout_constraintBottom_toBottomOf="@id/film_poster_image_view"
+            app:layout_constraintEnd_toEndOf="@id/film_poster_image_view"
+            app:layout_constraintStart_toStartOf="@id/film_poster_image_view"
+            app:layout_constraintTop_toTopOf="@id/film_poster_image_view" />
 
 
         <ImageView

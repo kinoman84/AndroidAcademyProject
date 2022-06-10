@@ -38,7 +38,7 @@ class FilmsAdapter(val clickListener: FragmentMoviesList.Callbacks?) : RecyclerV
 
         private lateinit var movie: Movie
 
-        private val filmNameTextView: TextView = itemView.findViewById(R.id.filmNameTextView)
+        private val filmNameTextView: TextView = itemView.findViewById(R.id.movie_name_text)
         var filmPosterImageView: ImageView = itemView.findViewById(R.id.film_poster_image_view)
 
 
