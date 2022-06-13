@@ -1,5 +1,6 @@
 package ru.alexeybuchnev.androidacademyprojeckt
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import ru.alexeybuchnev.androidacademyprojeckt.model.Movie
 
-class FilmsAdapter(val clickListener: FragmentMoviesList.Callbacks?) : RecyclerView.Adapter<FilmsAdapter.FilmListItemViewHolder>() {
+class FilmsAdapter(val clickListener: FragmentMoviesList.Callbacks?) :
+    RecyclerView.Adapter<FilmsAdapter.FilmListItemViewHolder>() {
     private var filmsList = listOf<Movie>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilmListItemViewHolder {
         val view: View =
@@ -21,7 +23,7 @@ class FilmsAdapter(val clickListener: FragmentMoviesList.Callbacks?) : RecyclerV
     override fun onBindViewHolder(holder: FilmListItemViewHolder, position: Int) {
         holder.bindFilm(filmsList[position])
 
-        holder.itemView.setOnClickListener {_ ->
+        holder.itemView.setOnClickListener { _ ->
             clickListener?.onFilmSelectedClick(position)
         }
     }
@@ -37,22 +39,29 @@ class FilmsAdapter(val clickListener: FragmentMoviesList.Callbacks?) : RecyclerV
     class FilmListItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private lateinit var movie: Movie
+        private val context: Context = itemView.context
 
         private val filmNameTextView: TextView = itemView.findViewById(R.id.movie_name_text)
-        var filmPosterImageView: ImageView = itemView.findViewById(R.id.film_poster_image_view)
+        private val filmPosterImageView: ImageView =
+            itemView.findViewById(R.id.film_poster_image_view)
+        private val reviewersCountTextView: TextView =
+            itemView.findViewById(R.id.reviewers_count_text_view)
 
 
         fun bindFilm(film: Movie) {
             this.movie = film
+
             filmNameTextView.text = film.title
-            //Glide.with(itemView.context).load(movie.imageUrl).into(filmPosterImageView)
+
+            reviewersCountTextView.text = String.format(
+                context.resources.getString(R.string.reviews_count),
+                movie.reviewCount
+            )
+
             Glide.with(itemView.context)
-                //.load("https://image.ibb.co/j142xJ/Amanda_Seyfried.jpg")
                 .load(movie.imageUrl)
                 .apply(imageOption)
                 .into(filmPosterImageView)
-            //filmPosterImageView.setImageResource(R.drawable.film_poster_avenges_end_game)
-            //Log.d("bindFilm", movie.imageUrl)
         }
 
         companion object {

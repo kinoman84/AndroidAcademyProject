@@ -44,7 +44,7 @@ class FragmentMoviesDetails : Fragment() {
         filmNameTextView = view.findViewById(R.id.movie_name_text)
         filmNameTextView.text = selectedFilm.name
 
-        filmPosterImageView = view.findViewById(R.id.film_poster_image_view)
+        filmPosterImageView = view.findViewById(R.id.film_logo_image_view)
         filmPosterImageView.setImageResource(selectedFilm.imageResourceId)
 
 

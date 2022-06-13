@@ -33,7 +33,7 @@
 
 
         <ImageView
-            android:id="@+id/film_poster_image_view"
+            android:id="@+id/film_logo_image_view"
             android:layout_width="0dp"
             android:layout_height="298dp"
             android:scaleType="centerCrop"
@@ -47,10 +47,10 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@drawable/ic_mask"
-            app:layout_constraintBottom_toBottomOf="@id/film_poster_image_view"
-            app:layout_constraintEnd_toEndOf="@id/film_poster_image_view"
-            app:layout_constraintStart_toStartOf="@id/film_poster_image_view"
-            app:layout_constraintTop_toTopOf="@id/film_poster_image_view" />
+            app:layout_constraintBottom_toBottomOf="@id/film_logo_image_view"
+            app:layout_constraintEnd_toEndOf="@id/film_logo_image_view"
+            app:layout_constraintStart_toStartOf="@id/film_logo_image_view"
+            app:layout_constraintTop_toTopOf="@id/film_logo_image_view" />
 
 
         <ImageView
@@ -182,7 +182,7 @@
             app:layout_constraintTop_toTopOf="@+id/star4" />
 
         <TextView
-            android:id="@+id/reviewersTextView"
+            android:id="@+id/reviewers_count_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8.89dp"
@@ -211,7 +211,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/reviewersTextView" />
+            app:layout_constraintTop_toBottomOf="@id/reviewers_count_text_view" />
 
         <TextView
             android:id="@+id/storylineContentTextView"

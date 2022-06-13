@@ -136,7 +136,7 @@
             android:background="@drawable/ic_star_icon_off" />
 
         <TextView
-            android:id="@+id/reviewersTextView"
+            android:id="@+id/reviewers_count_text_view"
             app:layout_constraintBottom_toBottomOf="@+id/star5"
             app:layout_constraintStart_toEndOf="@id/star5"
             app:layout_constraintTop_toTopOf="@+id/star5"
@@ -144,7 +144,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
             android:lineHeight="12dp"
-            android:text="125 Reviews"
+            android:text="@string/reviews_count"
+            tools:text="125 Reviews"
             android:textAlignment="textStart"
             android:textAllCaps="true"
             android:textColor="#6D6D80"
