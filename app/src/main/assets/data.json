@@ -452,7 +452,7 @@
     "video": false,
     "poster_path": "https://image.tmdb.org/t/p/w342/6agKYU5IQFpuDyUYPu39w7UCRrJ.jpg",
     "id": 740985,
-    "adult": false,
+    "adult": true,
     "backdrop_path": "https://image.tmdb.org/t/p/w342/hbrXbVoE0NuA1ORoSGGYNASagrl.jpg",
     "original_language": "en",
     "original_title": "Borat Subsequent Moviefilm",

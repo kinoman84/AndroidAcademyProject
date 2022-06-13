@@ -46,6 +46,9 @@ class FilmsAdapter(val clickListener: FragmentMoviesList.Callbacks?) :
             itemView.findViewById(R.id.film_poster_image_view)
         private val reviewersCountTextView: TextView =
             itemView.findViewById(R.id.reviewers_count_text_view)
+        private val genresTextView: TextView = itemView.findViewById(R.id.genres_text_view)
+        private val runningTimeTextView: TextView = itemView.findViewById(R.id.running_time_text_view)
+        private val ageRestrictionsTextView: TextView = itemView.findViewById(R.id.age_restrictions_text_view)
 
 
         fun bindFilm(film: Movie) {
@@ -53,15 +56,39 @@ class FilmsAdapter(val clickListener: FragmentMoviesList.Callbacks?) :
 
             filmNameTextView.text = film.title
 
+            runningTimeTextView.text = String.format(
+                context.resources.getString(R.string.running_time),
+                movie.runningTime
+            )
+
             reviewersCountTextView.text = String.format(
                 context.resources.getString(R.string.reviews_count),
                 movie.reviewCount
             )
 
+            ageRestrictionsTextView.text = String.format(
+                context.resources.getString(R.string.age_restrictions),
+                movie.pgAge
+            )
+
+            genresTextView.text = getGenresString()
+
             Glide.with(itemView.context)
                 .load(movie.imageUrl)
                 .apply(imageOption)
                 .into(filmPosterImageView)
+        }
+
+        private fun getGenresString(): String {
+            var genresString: String = ""
+
+            for (genre in movie.genres) {
+                if (genresString == ""){
+                    genresString = genresString.plus(genre.name)
+                } else genresString = genresString.plus(", ").plus(genre.name)
+            }
+
+            return genresString
         }
 
         companion object {
