@@ -33,7 +33,7 @@ class FragmentMoviesList : Fragment() {
     private lateinit var filmsListRecyclerView: RecyclerView
 
     interface Callbacks {
-        fun onFilmSelectedClick(filmIndex: Int)
+        fun onFilmSelectedClick(movieId: Int)
     }
 
     override fun onAttach(context: Context) {

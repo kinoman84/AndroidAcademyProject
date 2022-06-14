@@ -21,10 +21,13 @@ class FilmsAdapter(val clickListener: FragmentMoviesList.Callbacks?) :
     }
 
     override fun onBindViewHolder(holder: FilmListItemViewHolder, position: Int) {
-        holder.bindFilm(filmsList[position])
+
+        val bindingMovie: Movie = filmsList[position]
+
+        holder.bindFilm(bindingMovie)
 
         holder.itemView.setOnClickListener { _ ->
-            clickListener?.onFilmSelectedClick(position)
+            clickListener?.onFilmSelectedClick(bindingMovie.id)
         }
     }
 

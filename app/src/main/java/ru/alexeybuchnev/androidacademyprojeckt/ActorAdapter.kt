@@ -6,6 +6,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import ru.alexeybuchnev.androidacademyprojeckt.model.Actor
 
 class ActorAdapter(val actorsList: List<Actor>) : RecyclerView.Adapter<ActorItemViewHolder>() {
 
@@ -33,8 +36,20 @@ class ActorItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     fun bindActor(actor: Actor) {
         this.actor = actor
-        actorImageView.setImageResource(actor.imageResourceId)
+        //actorImageView.setImageResource(actor.imageResourceId)
         actorNameTextView.text = actor.name
+
+        Glide.with(itemView.context)
+            .load(actor.imageUrl)
+            .apply(imageOption)
+            .into(actorImageView)
+    }
+
+    companion object {
+        private val imageOption = RequestOptions()
+            .placeholder(R.drawable.actor_img_chris_evans)
+            .fallback(R.drawable.actor_img_chris_evans)
+            .centerCrop()
     }
 
 }

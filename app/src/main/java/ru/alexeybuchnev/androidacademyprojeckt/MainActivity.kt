@@ -2,7 +2,6 @@ package ru.alexeybuchnev.androidacademyprojeckt
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import kotlinx.serialization.Serializable
 
 class MainActivity : AppCompatActivity(), FragmentMoviesList.Callbacks {
 
@@ -20,8 +19,8 @@ class MainActivity : AppCompatActivity(), FragmentMoviesList.Callbacks {
         }
     }
 
-    override fun onFilmSelectedClick(filmIndex: Int) {
-        val fragmentMoviesDetails = FragmentMoviesDetails.newInstance(filmIndex)
+    override fun onFilmSelectedClick(movieId: Int) {
+        val fragmentMoviesDetails = FragmentMoviesDetails.newInstance(movieId)
         supportFragmentManager
             .beginTransaction()
             .add(R.id.fragment_container, fragmentMoviesDetails)
