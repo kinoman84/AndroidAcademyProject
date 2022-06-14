@@ -1,5 +1,6 @@
 package ru.alexeybuchnev.androidacademyprojeckt
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -22,8 +23,18 @@ class FragmentMoviesDetails : Fragment() {
     private var selectedMovieId: Int? = null
     private lateinit var selectedMovie: Movie
     private lateinit var filmNameTextView: TextView
+    private lateinit var ageRestrictionTextView: TextView
+    private lateinit var genresTextView: TextView
+    private lateinit var storylineTextView: TextView
+    private lateinit var reviewersTextView: TextView
     private lateinit var filmPosterImageView: ImageView
     private lateinit var actorsRecyclerView: RecyclerView
+
+    private lateinit var star1: View
+    private lateinit var star2: View
+    private lateinit var star3: View
+    private lateinit var star4: View
+    private lateinit var star5: View
 
     private var scope = CoroutineScope(Job() + Dispatchers.Default)
 
@@ -47,11 +58,23 @@ class FragmentMoviesDetails : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        val movieRepository: MovieRepository = JsonMovieRepository(requireContext())
+        val context: Context = requireContext()
+        val movieRepository: MovieRepository = JsonMovieRepository(context)
 
         filmNameTextView = view.findViewById(R.id.movie_name_text)
         filmPosterImageView = view.findViewById(R.id.film_logo_image_view)
         actorsRecyclerView = view.findViewById(R.id.actorsRecyclerView)
+        ageRestrictionTextView = view.findViewById(R.id.age_restrictions_text_view)
+        genresTextView = view.findViewById(R.id.genres_text_view)
+        storylineTextView = view.findViewById(R.id.storyline_text_view)
+        reviewersTextView = view.findViewById(R.id.reviewers_count_text_view)
+
+        star1 = view.findViewById(R.id.star1)
+        star2 = view.findViewById(R.id.star2)
+        star3 = view.findViewById(R.id.star3)
+        star4 = view.findViewById(R.id.star4)
+        star5 = view.findViewById(R.id.star5)
+
 
         actorsRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -67,18 +90,66 @@ class FragmentMoviesDetails : Fragment() {
 
     private suspend fun updateUi() = withContext(Dispatchers.Main) {
 
+        val context: Context = requireContext()
+
         filmNameTextView.text = selectedMovie.title
 
         Glide.with(requireContext())
             .load(selectedMovie.detailImageUrl)
             .into(filmPosterImageView)
 
+        ageRestrictionTextView.text = String.format(
+            context.resources.getString(R.string.age_restrictions),
+            selectedMovie.pgAge
+        )
+
+        reviewersTextView.text = String.format(
+            context.resources.getString(R.string.reviews_count),
+            selectedMovie.reviewCount
+        )
+
+        genresTextView.text = getGenresString()
+        storylineTextView.text = selectedMovie.storyLine
+
 
         actorsRecyclerView.adapter = ActorAdapter(selectedMovie.actors)
 
+        star1.background = if (selectedMovie.rating >= 1) context.resources.getDrawable(
+            R.drawable.star_icon_on,
+            null
+        ) else context.resources.getDrawable(R.drawable.star_icon_off, null)
 
+        star2.background = if (selectedMovie.rating >= 2) context.resources.getDrawable(
+            R.drawable.star_icon_on,
+            null
+        ) else context.resources.getDrawable(R.drawable.star_icon_off, null)
 
+        star3.background = if (selectedMovie.rating >= 3) context.resources.getDrawable(
+            R.drawable.star_icon_on,
+            null
+        ) else context.resources.getDrawable(R.drawable.star_icon_off, null)
 
+        star4.background = if (selectedMovie.rating >= 4) context.resources.getDrawable(
+            R.drawable.star_icon_on,
+            null
+        ) else context.resources.getDrawable(R.drawable.star_icon_off, null)
+
+        star5.background = if (selectedMovie.rating >= 5) context.resources.getDrawable(
+            R.drawable.star_icon_on,
+            null
+        ) else context.resources.getDrawable(R.drawable.star_icon_off, null)
+    }
+
+    private fun getGenresString(): String {
+        var genresString: String = ""
+
+        for (genre in selectedMovie.genres) {
+            if (genresString == "") {
+                genresString = genresString.plus(genre.name)
+            } else genresString = genresString.plus(", ").plus(genre.name)
+        }
+
+        return genresString
     }
 
     companion object {
