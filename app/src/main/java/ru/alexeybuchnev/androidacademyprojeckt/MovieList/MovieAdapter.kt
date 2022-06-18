@@ -1,6 +1,7 @@
 package ru.alexeybuchnev.androidacademyprojeckt.MovieList
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +15,9 @@ import ru.alexeybuchnev.androidacademyprojeckt.model.Movie
 
 class MovieAdapter(val clickListener: MoviesListFragment.Callbacks?) :
     RecyclerView.Adapter<MovieAdapter.FilmListItemViewHolder>() {
+
     private var filmsList = listOf<Movie>()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilmListItemViewHolder {
         val view: View =
             LayoutInflater.from(parent.context).inflate(R.layout.view_holder_movie, parent, false)
@@ -27,7 +30,7 @@ class MovieAdapter(val clickListener: MoviesListFragment.Callbacks?) :
 
         holder.bindFilm(bindingMovie)
 
-        holder.itemView.setOnClickListener { _ ->
+        holder.itemView.setOnClickListener {
             clickListener?.onFilmSelectedClick(bindingMovie.id)
         }
     }

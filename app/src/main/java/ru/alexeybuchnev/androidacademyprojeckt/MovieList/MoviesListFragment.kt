@@ -17,9 +17,13 @@ import ru.alexeybuchnev.androidacademyprojeckt.model.Movie
 class MoviesListFragment : Fragment() {
 
     private var callbacks: Callbacks? = null
+    private lateinit var movieRepository: MovieRepository
+    private lateinit var movieListViewModel: MovieListViewModel
 
     private var scope = CoroutineScope(Job() + Dispatchers.Default)
     private lateinit var filmsListRecyclerView: RecyclerView
+
+    private lateinit var adapter: MovieAdapter
 
     interface Callbacks {
         fun onFilmSelectedClick(movieId: Int)
@@ -28,37 +32,47 @@ class MoviesListFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         callbacks = context as Callbacks
+        adapter = MovieAdapter(callbacks)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        val view: View = inflater.inflate(R.layout.fragment_movies_list, container, false)
-
-        return view
+        return inflater.inflate(R.layout.fragment_movies_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        movieRepository = JsonMovieRepository(requireContext())
+        movieListViewModel = MovieListViewModel(movieRepository)
+
         filmsListRecyclerView = view.findViewById(R.id.filmsListRecyclerView)
+        filmsListRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
 
-        val movieRepository: MovieRepository = JsonMovieRepository(requireContext())
+        movieListViewModel.loadMovies()
+        movieListViewModel.movieListLiveData.observe(this.viewLifecycleOwner) {
+            updateFilmList(it)
+        }
 
+        /*val movieRepository: MovieRepository = JsonMovieRepository(requireContext())
 
         scope.launch {
             var filmsList: List<Movie>
             filmsList = movieRepository.loadMovies()
             updateFilmList(filmsList)
-        }
-
-        filmsListRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        }*/
 
 
     }
 
-    private suspend fun updateFilmList(moviesList: List<Movie>) = withContext(Dispatchers.Main){
+    /*private suspend fun updateFilmList(moviesList: List<Movie>) = withContext(Dispatchers.Main){
         filmsListRecyclerView.adapter = MovieAdapter(callbacks).apply { bindMovies(moviesList) }
+    }*/
+
+    private fun updateFilmList(moviesList: List<Movie>) {
+        adapter.bindMovies(moviesList)
+        filmsListRecyclerView.adapter = adapter
     }
 
     companion object {
