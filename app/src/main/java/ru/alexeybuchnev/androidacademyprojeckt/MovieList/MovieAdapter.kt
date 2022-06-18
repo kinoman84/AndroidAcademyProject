@@ -1,4 +1,4 @@
-package ru.alexeybuchnev.androidacademyprojeckt
+package ru.alexeybuchnev.androidacademyprojeckt.MovieList
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,10 +9,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import ru.alexeybuchnev.androidacademyprojeckt.R
 import ru.alexeybuchnev.androidacademyprojeckt.model.Movie
 
-class FilmsAdapter(val clickListener: FragmentMoviesList.Callbacks?) :
-    RecyclerView.Adapter<FilmsAdapter.FilmListItemViewHolder>() {
+class MovieAdapter(val clickListener: FragmentMoviesList.Callbacks?) :
+    RecyclerView.Adapter<MovieAdapter.FilmListItemViewHolder>() {
     private var filmsList = listOf<Movie>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilmListItemViewHolder {
         val view: View =

@@ -2,6 +2,7 @@ package ru.alexeybuchnev.androidacademyprojeckt
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import ru.alexeybuchnev.androidacademyprojeckt.MovieList.FragmentMoviesList
 
 class MainActivity : AppCompatActivity(), FragmentMoviesList.Callbacks {
 
@@ -11,7 +12,7 @@ class MainActivity : AppCompatActivity(), FragmentMoviesList.Callbacks {
 
         //TODO если переменную понадобится вынести, нужно будет её проинициализировать после переворота экрана
         if (savedInstanceState == null) {
-            val fragmentMovieList = FragmentMoviesList.newInstance("param1", "param2")
+            val fragmentMovieList = FragmentMoviesList.newInstance()
             supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragmentMovieList)
