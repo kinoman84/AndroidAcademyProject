@@ -14,7 +14,7 @@ import kotlinx.coroutines.*
 import ru.alexeybuchnev.androidacademyprojeckt.R
 import ru.alexeybuchnev.androidacademyprojeckt.model.Movie
 
-class FragmentMoviesList : Fragment() {
+class MoviesListFragment : Fragment() {
 
     private var callbacks: Callbacks? = null
 
@@ -61,10 +61,8 @@ class FragmentMoviesList : Fragment() {
         filmsListRecyclerView.adapter = MovieAdapter(callbacks).apply { bindMovies(moviesList) }
     }
 
-
-
     companion object {
         @JvmStatic
-        fun newInstance() = FragmentMoviesList()
+        fun newInstance() = MoviesListFragment()
     }
 }

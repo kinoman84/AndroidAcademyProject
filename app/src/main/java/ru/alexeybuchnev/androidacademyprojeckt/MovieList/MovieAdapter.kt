@@ -12,7 +12,7 @@ import com.bumptech.glide.request.RequestOptions
 import ru.alexeybuchnev.androidacademyprojeckt.R
 import ru.alexeybuchnev.androidacademyprojeckt.model.Movie
 
-class MovieAdapter(val clickListener: FragmentMoviesList.Callbacks?) :
+class MovieAdapter(val clickListener: MoviesListFragment.Callbacks?) :
     RecyclerView.Adapter<MovieAdapter.FilmListItemViewHolder>() {
     private var filmsList = listOf<Movie>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilmListItemViewHolder {

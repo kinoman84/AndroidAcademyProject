@@ -2,9 +2,9 @@ package ru.alexeybuchnev.androidacademyprojeckt
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import ru.alexeybuchnev.androidacademyprojeckt.MovieList.FragmentMoviesList
+import ru.alexeybuchnev.androidacademyprojeckt.MovieList.MoviesListFragment
 
-class MainActivity : AppCompatActivity(), FragmentMoviesList.Callbacks {
+class MainActivity : AppCompatActivity(), MoviesListFragment.Callbacks {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity(), FragmentMoviesList.Callbacks {
 
         //TODO если переменную понадобится вынести, нужно будет её проинициализировать после переворота экрана
         if (savedInstanceState == null) {
-            val fragmentMovieList = FragmentMoviesList.newInstance()
+            val fragmentMovieList = MoviesListFragment.newInstance()
             supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragmentMovieList)
