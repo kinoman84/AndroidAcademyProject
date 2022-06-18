@@ -231,7 +231,7 @@
             app:layout_constraintTop_toBottomOf="@id/storylineTitleTextView" />
 
         <TextView
-            android:id="@+id/castTitleTextView"
+            android:id="@+id/cast_title_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -254,7 +254,7 @@
             android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/castTitleTextView" />
+            app:layout_constraintTop_toBottomOf="@id/cast_title_text_view" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

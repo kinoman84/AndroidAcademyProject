@@ -27,6 +27,7 @@ class FragmentMoviesDetails : Fragment() {
     private lateinit var genresTextView: TextView
     private lateinit var storylineTextView: TextView
     private lateinit var reviewersTextView: TextView
+    private lateinit var castTitleTextView: TextView
     private lateinit var filmPosterImageView: ImageView
     private lateinit var actorsRecyclerView: RecyclerView
 
@@ -68,6 +69,7 @@ class FragmentMoviesDetails : Fragment() {
         genresTextView = view.findViewById(R.id.genres_text_view)
         storylineTextView = view.findViewById(R.id.storyline_text_view)
         reviewersTextView = view.findViewById(R.id.reviewers_count_text_view)
+        castTitleTextView = view.findViewById(R.id.cast_title_text_view)
 
         star1 = view.findViewById(R.id.star1)
         star2 = view.findViewById(R.id.star2)
@@ -110,6 +112,8 @@ class FragmentMoviesDetails : Fragment() {
 
         genresTextView.text = getGenresString()
         storylineTextView.text = selectedMovie.storyLine
+
+        if (selectedMovie.actors.isEmpty()) castTitleTextView.visibility = View.GONE
 
 
         actorsRecyclerView.adapter = ActorAdapter(selectedMovie.actors)
