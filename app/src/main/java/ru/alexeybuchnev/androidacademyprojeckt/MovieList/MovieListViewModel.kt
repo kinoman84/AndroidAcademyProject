@@ -10,8 +10,6 @@ import ru.alexeybuchnev.androidacademyprojeckt.model.Movie
 
 class MovieListViewModel (private val movieRepository: MovieRepository) : ViewModel() {
 
-    //Загруженные фильмы нужно засунуть в livedata и осуществлять загрузку их в viewmodel
-
     private val mutableMovieList = MutableLiveData<List<Movie>>(emptyList())
 
     val movieListLiveData: LiveData<List<Movie>> get() = mutableMovieList

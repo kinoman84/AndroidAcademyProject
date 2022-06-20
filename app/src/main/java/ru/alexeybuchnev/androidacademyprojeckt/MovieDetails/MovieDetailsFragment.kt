@@ -1,4 +1,4 @@
-package ru.alexeybuchnev.androidacademyprojeckt
+package ru.alexeybuchnev.androidacademyprojeckt.MovieDetails
 
 import android.content.Context
 import android.os.Bundle
@@ -14,6 +14,8 @@ import com.android.academy.fundamentals.homework.data.JsonMovieRepository
 import com.android.academy.fundamentals.homework.data.MovieRepository
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.*
+import ru.alexeybuchnev.androidacademyprojeckt.ActorAdapter
+import ru.alexeybuchnev.androidacademyprojeckt.R
 import ru.alexeybuchnev.androidacademyprojeckt.model.Movie
 
 private const val ARG_FILM_INDEX = "selectedMovieId"
@@ -21,7 +23,10 @@ private const val ARG_FILM_INDEX = "selectedMovieId"
 class FragmentMoviesDetails : Fragment() {
 
     private var selectedMovieId: Int? = null
-    private lateinit var selectedMovie: Movie
+    private lateinit var movieViewModel: MovieDetailsViewModel
+    private lateinit var movieRepository: MovieRepository
+
+    //private lateinit var selectedMovie: Movie
     private lateinit var filmNameTextView: TextView
     private lateinit var ageRestrictionTextView: TextView
     private lateinit var genresTextView: TextView
@@ -47,8 +52,6 @@ class FragmentMoviesDetails : Fragment() {
         }
     }
 
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -60,8 +63,31 @@ class FragmentMoviesDetails : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         val context: Context = requireContext()
-        val movieRepository: MovieRepository = JsonMovieRepository(context)
+        movieRepository = JsonMovieRepository(context)
+        movieViewModel = MovieDetailsViewModel(movieRepository)
 
+        initView(view)
+
+        actorsRecyclerView.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
+        movieViewModel.movieLiveData.observe(this.viewLifecycleOwner) {
+            updateUi(it)
+        }
+
+        selectedMovieId?.let { movieViewModel.loadMovie(it) }
+
+
+        /*scope.launch {
+            selectedMovieId?.let { it ->
+                selectedMovie = movieRepository.loadMovie(it)!!
+                updateUi()
+            }
+        }*/
+
+    }
+
+    private fun initView(view: View) {
         filmNameTextView = view.findViewById(R.id.movie_name_text)
         filmPosterImageView = view.findViewById(R.id.film_logo_image_view)
         actorsRecyclerView = view.findViewById(R.id.actorsRecyclerView)
@@ -76,21 +102,9 @@ class FragmentMoviesDetails : Fragment() {
         star3 = view.findViewById(R.id.star3)
         star4 = view.findViewById(R.id.star4)
         star5 = view.findViewById(R.id.star5)
-
-
-        actorsRecyclerView.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-
-        scope.launch {
-            selectedMovieId?.let { it ->
-                selectedMovie = movieRepository.loadMovie(it)!!
-                updateUi()
-            }
-        }
-
     }
 
-    private suspend fun updateUi() = withContext(Dispatchers.Main) {
+    private fun updateUi(selectedMovie: Movie) {
 
         val context: Context = requireContext()
 
@@ -110,7 +124,7 @@ class FragmentMoviesDetails : Fragment() {
             selectedMovie.reviewCount
         )
 
-        genresTextView.text = getGenresString()
+        genresTextView.text = getGenresString(selectedMovie)
         storylineTextView.text = selectedMovie.storyLine
 
         if (selectedMovie.actors.isEmpty()) castTitleTextView.visibility = View.GONE
@@ -144,7 +158,7 @@ class FragmentMoviesDetails : Fragment() {
         ) else context.resources.getDrawable(R.drawable.star_icon_off, null)
     }
 
-    private fun getGenresString(): String {
+    private fun getGenresString(selectedMovie: Movie): String {
         var genresString: String = ""
 
         for (genre in selectedMovie.genres) {
