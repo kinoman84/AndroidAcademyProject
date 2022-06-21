@@ -1,4 +1,4 @@
-package ru.alexeybuchnev.androidacademyprojeckt.MovieList
+package ru.alexeybuchnev.androidacademyprojeckt.features.movielist
 
 import android.content.Context
 import android.os.Bundle

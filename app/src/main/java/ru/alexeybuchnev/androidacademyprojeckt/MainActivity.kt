@@ -2,8 +2,8 @@ package ru.alexeybuchnev.androidacademyprojeckt
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import ru.alexeybuchnev.androidacademyprojeckt.MovieDetails.FragmentMoviesDetails
-import ru.alexeybuchnev.androidacademyprojeckt.MovieList.MoviesListFragment
+import ru.alexeybuchnev.androidacademyprojeckt.features.moviedetails.FragmentMoviesDetails
+import ru.alexeybuchnev.androidacademyprojeckt.features.movielist.MoviesListFragment
 
 class MainActivity : AppCompatActivity(), MoviesListFragment.Callbacks {
 

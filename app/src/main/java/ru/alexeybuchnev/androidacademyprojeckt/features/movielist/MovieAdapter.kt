@@ -1,7 +1,6 @@
-package ru.alexeybuchnev.androidacademyprojeckt.MovieList
+package ru.alexeybuchnev.androidacademyprojeckt.features.movielist
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

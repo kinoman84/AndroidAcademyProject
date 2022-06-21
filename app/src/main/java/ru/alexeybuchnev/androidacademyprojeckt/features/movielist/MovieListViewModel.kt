@@ -1,4 +1,4 @@
-package ru.alexeybuchnev.androidacademyprojeckt.MovieList
+package ru.alexeybuchnev.androidacademyprojeckt.features.movielist
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,7 +11,6 @@ import ru.alexeybuchnev.androidacademyprojeckt.model.Movie
 class MovieListViewModel (private val movieRepository: MovieRepository) : ViewModel() {
 
     private val mutableMovieList = MutableLiveData<List<Movie>>(emptyList())
-
     val movieListLiveData: LiveData<List<Movie>> get() = mutableMovieList
 
     fun loadMovies() {

@@ -1,4 +1,4 @@
-package ru.alexeybuchnev.androidacademyprojeckt.MovieDetails
+package ru.alexeybuchnev.androidacademyprojeckt.features.moviedetails
 
 import android.content.Context
 import android.os.Bundle
@@ -26,7 +26,6 @@ class FragmentMoviesDetails : Fragment() {
     private lateinit var movieViewModel: MovieDetailsViewModel
     private lateinit var movieRepository: MovieRepository
 
-    //private lateinit var selectedMovie: Movie
     private lateinit var filmNameTextView: TextView
     private lateinit var ageRestrictionTextView: TextView
     private lateinit var genresTextView: TextView
@@ -42,9 +41,6 @@ class FragmentMoviesDetails : Fragment() {
     private lateinit var star4: View
     private lateinit var star5: View
 
-    private var scope = CoroutineScope(Job() + Dispatchers.Default)
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let { it ->
@@ -56,7 +52,6 @@ class FragmentMoviesDetails : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_movies_details, container, false)
     }
 
@@ -76,14 +71,6 @@ class FragmentMoviesDetails : Fragment() {
         }
 
         selectedMovieId?.let { movieViewModel.loadMovie(it) }
-
-
-        /*scope.launch {
-            selectedMovieId?.let { it ->
-                selectedMovie = movieRepository.loadMovie(it)!!
-                updateUi()
-            }
-        }*/
 
     }
 

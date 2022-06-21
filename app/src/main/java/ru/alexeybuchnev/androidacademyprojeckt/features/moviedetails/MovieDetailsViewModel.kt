@@ -1,4 +1,4 @@
-package ru.alexeybuchnev.androidacademyprojeckt.MovieDetails
+package ru.alexeybuchnev.androidacademyprojeckt.features.moviedetails
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
