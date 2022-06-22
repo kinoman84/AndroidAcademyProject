@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.academy.fundamentals.homework.data.JsonMovieRepository
-import com.android.academy.fundamentals.homework.data.MovieRepository
 import ru.alexeybuchnev.androidacademyprojeckt.R
+import ru.alexeybuchnev.androidacademyprojeckt.data.MovieRepository
 import ru.alexeybuchnev.androidacademyprojeckt.model.Movie
 
 class MoviesListFragment : Fragment() {
@@ -42,6 +42,7 @@ class MoviesListFragment : Fragment() {
 
         initViews(view)
 
+        //TODO delete it after implement network
         movieRepository = JsonMovieRepository(requireContext())
         movieListViewModel = MovieListViewModel(movieRepository)
 

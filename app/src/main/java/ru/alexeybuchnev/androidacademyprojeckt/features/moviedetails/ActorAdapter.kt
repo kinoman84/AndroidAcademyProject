@@ -36,7 +36,6 @@ class ActorItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     fun bindActor(actor: Actor) {
         this.actor = actor
-        //actorImageView.setImageResource(actor.imageResourceId)
         actorNameTextView.text = actor.name
 
         Glide.with(itemView.context)
@@ -46,6 +45,7 @@ class ActorItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     }
 
     companion object {
+        //TODO переделать на использование COIL
         private val imageOption = RequestOptions()
             .placeholder(R.drawable.actor_img_chris_evans)
             .fallback(R.drawable.actor_img_chris_evans)

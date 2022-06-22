@@ -11,11 +11,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.academy.fundamentals.homework.data.JsonMovieRepository
-import com.android.academy.fundamentals.homework.data.MovieRepository
 import com.bumptech.glide.Glide
-import kotlinx.coroutines.*
 import ru.alexeybuchnev.androidacademyprojeckt.ActorAdapter
 import ru.alexeybuchnev.androidacademyprojeckt.R
+import ru.alexeybuchnev.androidacademyprojeckt.data.MovieRepository
 import ru.alexeybuchnev.androidacademyprojeckt.model.Movie
 
 private const val ARG_FILM_INDEX = "selectedMovieId"
@@ -58,6 +57,7 @@ class FragmentMoviesDetails : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         val context: Context = requireContext()
+        //TODO delete it after implement network
         movieRepository = JsonMovieRepository(context)
         movieViewModel = MovieDetailsViewModel(movieRepository)
 
