@@ -97,8 +97,10 @@ class FragmentMoviesDetails : Fragment() {
 
         filmNameTextView.text = selectedMovie.title
 
+        val imgUrlBase: String = "https://image.tmdb.org/t/p/w780"
+
         Glide.with(requireContext())
-            .load(selectedMovie.detailImageUrl)
+            .load(imgUrlBase + selectedMovie.detailImageUrl)
             .into(filmPosterImageView)
 
         ageRestrictionTextView.text = String.format(

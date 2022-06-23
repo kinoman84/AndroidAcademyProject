@@ -87,8 +87,10 @@ class MovieAdapter(val clickListener: MoviesListFragment.Callbacks?) :
 
             genresTextView.text = getGenresString()
 
+            val imgUrlBase: String = "https://image.tmdb.org/t/p/w185" // /9Gtg2DzBhmYamXBS1hKAhiwbBKS.jpg
+
             Glide.with(itemView.context)
-                .load(movie.imageUrl)
+                .load(imgUrlBase + movie.imageUrl)
                 .apply(imageOption)
                 .into(filmPosterImageView)
 
