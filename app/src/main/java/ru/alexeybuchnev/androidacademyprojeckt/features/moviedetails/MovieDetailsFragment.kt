@@ -114,10 +114,10 @@ class FragmentMoviesDetails : Fragment() {
         genresTextView.text = getGenresString(selectedMovie)
         storylineTextView.text = selectedMovie.storyLine
 
-        if (selectedMovie.actors.isEmpty()) castTitleTextView.visibility = View.GONE
+        if (selectedMovie.actors?.isEmpty() == true) castTitleTextView.visibility = View.GONE
 
 
-        actorsRecyclerView.adapter = ActorAdapter(selectedMovie.actors)
+        actorsRecyclerView.adapter = ActorAdapter(selectedMovie.actors.orEmpty())
 
         star1.background = if (selectedMovie.rating >= 1) context.resources.getDrawable(
             R.drawable.star_icon_on,

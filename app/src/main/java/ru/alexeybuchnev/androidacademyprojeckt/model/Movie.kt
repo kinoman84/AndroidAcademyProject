@@ -11,7 +11,7 @@ data class Movie(
     var pgAge: Int,
     var runningTime: Int,
     var genres: List<Genre>,
-    var actors: List<Actor>,
+    var actors: List<Actor>? = null,
     var isLiked: Boolean
 ) {
 }
