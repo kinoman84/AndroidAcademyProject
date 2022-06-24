@@ -13,10 +13,26 @@ class MovieListViewModel (private val movieRepository: MovieRepository) : ViewMo
     private val mutableMovieList = MutableLiveData<List<Movie>>(emptyList())
     val movieListLiveData: LiveData<List<Movie>> get() = mutableMovieList
 
+    private val mutableState = MutableLiveData<State>()
+    val stateLiveData get() = mutableState
+
+
     fun loadMovies() {
+
+        //TODO add loader
         viewModelScope.launch {
+            stateLiveData.value = State.Loading()
+
             val filmsList: List<Movie> = movieRepository.loadMovies()
             mutableMovieList.value = filmsList
+
+            stateLiveData.value = State.Success()
         }
+
+    }
+
+    sealed class State {
+        class Loading : State()
+        class Success : State()
     }
 }

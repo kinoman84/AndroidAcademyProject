@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.academy.fundamentals.homework.data.JsonMovieRepository
@@ -19,6 +20,7 @@ class MoviesListFragment : Fragment() {
     private lateinit var movieRepository: MovieRepository
     private lateinit var movieListViewModel: MovieListViewModel
     private lateinit var filmsListRecyclerView: RecyclerView
+    private lateinit var progressBar: ProgressBar
     private lateinit var adapter: MovieAdapter
 
     interface Callbacks {
@@ -50,6 +52,16 @@ class MoviesListFragment : Fragment() {
         filmsListRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
 
         movieListViewModel.loadMovies()
+        movieListViewModel.stateLiveData.observe(this.viewLifecycleOwner) {
+            when (it) {
+                is MovieListViewModel.State.Loading -> {
+                    setLoading(true)
+                }
+                is MovieListViewModel.State.Success -> {
+                    setLoading(false)
+                }
+            }
+        }
         movieListViewModel.movieListLiveData.observe(this.viewLifecycleOwner) {
             updateFilmList(it)
         }
@@ -62,6 +74,18 @@ class MoviesListFragment : Fragment() {
 
     private fun initViews(view: View) {
         filmsListRecyclerView = view.findViewById(R.id.filmsListRecyclerView)
+        progressBar = view.findViewById(R.id.progressBar)
+    }
+
+    private fun setLoading(loading: Boolean) {
+        when (loading) {
+            true -> {
+                progressBar.visibility = View.VISIBLE
+            }
+            false -> {
+                progressBar.visibility = View.GONE
+            }
+        }
     }
 
     companion object {
