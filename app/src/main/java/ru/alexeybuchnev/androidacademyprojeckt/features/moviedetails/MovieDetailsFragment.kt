@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.academy.fundamentals.homework.data.JsonMovieRepository
@@ -59,7 +61,11 @@ class FragmentMoviesDetails : Fragment() {
         val context: Context = requireContext()
         //TODO delete it after implement network
         movieRepository = JsonMovieRepository(context)
-        movieViewModel = MovieDetailsViewModel(movieRepository)
+        //movieViewModel = MovieDetailsViewModel(movieRepository)
+        movieViewModel = ViewModelProvider(
+            this,
+            MovieDetailsViewModelFactory(movieRepository)
+        )[MovieDetailsViewModel::class.java]
 
         initView(view)
 

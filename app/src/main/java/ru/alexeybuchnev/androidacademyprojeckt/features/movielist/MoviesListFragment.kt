@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.academy.fundamentals.homework.data.JsonMovieRepository
@@ -46,8 +47,10 @@ class MoviesListFragment : Fragment() {
 
         //TODO delete it after implement network
         movieRepository = JsonMovieRepository(requireContext())
-        movieListViewModel = MovieListViewModel(movieRepository)
-
+        movieListViewModel = ViewModelProvider(
+            this,
+            MovieListViewModelFactory(movieRepository)
+        )[MovieListViewModel::class.java]
 
         filmsListRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
 
