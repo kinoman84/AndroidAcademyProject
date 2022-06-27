@@ -38,8 +38,10 @@ class ActorItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         this.actor = actor
         actorNameTextView.text = actor.name
 
+        val imgUrlBase: String = "https://image.tmdb.org/t/p/w185"
+
         Glide.with(itemView.context)
-            .load(actor.imageUrl)
+            .load(imgUrlBase + actor.imageUrl)
             .apply(imageOption)
             .into(actorImageView)
     }

@@ -11,10 +11,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.create
-import ru.alexeybuchnev.androidacademyprojeckt.data.JsonGenresResponse
-import ru.alexeybuchnev.androidacademyprojeckt.data.JsonMovieResponse
-import ru.alexeybuchnev.androidacademyprojeckt.data.MovieApi
-import ru.alexeybuchnev.androidacademyprojeckt.data.MovieRepository
+import ru.alexeybuchnev.androidacademyprojeckt.data.*
 import ru.alexeybuchnev.androidacademyprojeckt.model.Actor
 import ru.alexeybuchnev.androidacademyprojeckt.model.Genre
 import ru.alexeybuchnev.androidacademyprojeckt.model.Movie
@@ -69,6 +66,43 @@ class JsonMovieRepository(private val context: Context) : MovieRepository {
 
         return movieList ?: emptyList()
 
+    }
+
+    private suspend fun loadMovieFromApi(id: Int): Movie {
+
+        val responseMove: JsonMovieDetails = RetrofitModule.movieApi.getMovieDetails(id)
+        val casts = loadCredits(id)
+
+
+        val movie: Movie = Movie(
+            id = responseMove.id,
+            title = responseMove.title,
+            storyLine = responseMove.overview,
+            imageUrl = responseMove.posterPicture,
+            detailImageUrl = responseMove.backdropPicture,
+            rating = (responseMove.ratings / 2).toInt(),
+            reviewCount = responseMove.votesCount,
+            pgAge = if (responseMove.adult) 16 else 13,
+            runningTime = responseMove.runtime?.toInt() ?: 0,
+            genres = responseMove.genreIds.map {
+                jsonGenre -> Genre(id = jsonGenre.id, name = jsonGenre.name)
+            },
+            //TODO ограничить список до 10 актёров. убрать актёров без фото или сделать плэйсхолдер
+            actors = casts.map { castItem ->
+                Actor(
+                    id = castItem.id,
+                    name = castItem.name,
+                    imageUrl = castItem.profilePath ?: "null"
+                )},
+            isLiked = false
+        )
+
+        return movie
+
+    }
+
+    private suspend fun loadCredits(movieId: Int): List<CastItem> {
+        return RetrofitModule.movieApi.getCredits(movieId).cast.orEmpty()
     }
 
     private suspend fun loadMoviesFromJsonFile(): List<Movie> {
@@ -139,8 +173,9 @@ class JsonMovieRepository(private val context: Context) : MovieRepository {
     }
 
     override suspend fun loadMovie(movieId: Int): Movie? {
-        val cachedMovies = movies ?: loadMovies()
-        return cachedMovies.find { it.id == movieId }
+        /*val cachedMovies = movies ?: loadMovies()
+        return cachedMovies.find { it.id == movieId }*/
+        return loadMovieFromApi(movieId)
     }
 
     private fun <T : Any> T?.orThrow(createThrowable: () -> Throwable): T {
