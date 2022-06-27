@@ -18,6 +18,7 @@ import ru.alexeybuchnev.androidacademyprojeckt.data.MovieRepository
 import ru.alexeybuchnev.androidacademyprojeckt.model.Actor
 import ru.alexeybuchnev.androidacademyprojeckt.model.Genre
 import ru.alexeybuchnev.androidacademyprojeckt.model.Movie
+import java.util.concurrent.TimeUnit
 
 class JsonMovieRepository(private val context: Context) : MovieRepository {
     private val jsonFormat = Json { ignoreUnknownKeys = true }
@@ -155,6 +156,9 @@ private object RetrofitModule {
 
     private val client : OkHttpClient = OkHttpClient()
         .newBuilder()
+        .connectTimeout(10, TimeUnit.SECONDS)
+        .writeTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
         .addInterceptor(HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         })

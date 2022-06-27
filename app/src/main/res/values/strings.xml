@@ -13,5 +13,6 @@
     <string name="reviews_count">%1$d Reviews</string>
     <string name="running_time">%1$d MIN</string>
     <string name="storyline">After the devastating events of Avengers: Infinity War, the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to reverse Thanos\' actions and restore balance to the universe.</string>
+    <string name="retry">Retry</string>
 
 </resources>

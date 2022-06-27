@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ProgressBar
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -23,6 +24,7 @@ class MoviesListFragment : Fragment() {
     private lateinit var filmsListRecyclerView: RecyclerView
     private lateinit var progressBar: ProgressBar
     private lateinit var adapter: MovieAdapter
+    private lateinit var retryButton: Button
 
     interface Callbacks {
         fun onFilmSelectedClick(movieId: Int)
@@ -59,16 +61,25 @@ class MoviesListFragment : Fragment() {
             when (it) {
                 is MovieListViewModel.State.Loading -> {
                     setLoading(true)
+                    retryButton.visibility = View.GONE
                 }
                 is MovieListViewModel.State.Success -> {
                     setLoading(false)
+                    retryButton.visibility = View.GONE
+                }
+                is MovieListViewModel.State.Error -> {
+                    setLoading(false)
+                    retryButton.visibility = View.VISIBLE
                 }
             }
         }
         movieListViewModel.movieListLiveData.observe(this.viewLifecycleOwner) {
             updateFilmList(it)
         }
+
+        retryButton.setOnClickListener { movieListViewModel.loadMovies() }
     }
+
 
     private fun updateFilmList(moviesList: List<Movie>) {
         adapter.bindMovies(moviesList)
@@ -78,6 +89,7 @@ class MoviesListFragment : Fragment() {
     private fun initViews(view: View) {
         filmsListRecyclerView = view.findViewById(R.id.filmsListRecyclerView)
         progressBar = view.findViewById(R.id.progressBar)
+        retryButton = view.findViewById(R.id.retryButton)
     }
 
     private fun setLoading(loading: Boolean) {
