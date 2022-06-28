@@ -2,6 +2,7 @@ package ru.alexeybuchnev.androidacademyprojeckt.features.movielist
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +17,7 @@ import ru.alexeybuchnev.androidacademyprojeckt.R
 import ru.alexeybuchnev.androidacademyprojeckt.data.MovieRepository
 import ru.alexeybuchnev.androidacademyprojeckt.model.Movie
 
-class MoviesListFragment : Fragment() {
+class MoviesListFragment : Fragment(), MovieAdapter.Callbacks {
 
     private var callbacks: Callbacks? = null
     private lateinit var movieRepository: MovieRepository
@@ -33,7 +34,7 @@ class MoviesListFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         callbacks = context as Callbacks
-        adapter = MovieAdapter(callbacks)
+        adapter = MovieAdapter(callbacks, this as MovieAdapter.Callbacks)
     }
 
     override fun onCreateView(
@@ -55,6 +56,7 @@ class MoviesListFragment : Fragment() {
         )[MovieListViewModel::class.java]
 
         filmsListRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        filmsListRecyclerView.adapter = adapter
 
         movieListViewModel.loadMovies()
         movieListViewModel.stateLiveData.observe(this.viewLifecycleOwner) {
@@ -80,10 +82,14 @@ class MoviesListFragment : Fragment() {
         retryButton.setOnClickListener { movieListViewModel.loadMovies() }
     }
 
+    override fun onListEnded() {
+        Log.d("onListEnded", "onListEnded")
+        movieListViewModel.loadMovies()
+    }
 
     private fun updateFilmList(moviesList: List<Movie>) {
         adapter.bindMovies(moviesList)
-        filmsListRecyclerView.adapter = adapter
+        adapter.notifyDataSetChanged()
     }
 
     private fun initViews(view: View) {

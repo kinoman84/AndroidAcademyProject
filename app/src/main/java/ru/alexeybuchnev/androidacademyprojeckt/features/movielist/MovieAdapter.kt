@@ -1,6 +1,7 @@
 package ru.alexeybuchnev.androidacademyprojeckt.features.movielist
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,10 +13,14 @@ import com.bumptech.glide.request.RequestOptions
 import ru.alexeybuchnev.androidacademyprojeckt.R
 import ru.alexeybuchnev.androidacademyprojeckt.model.Movie
 
-class MovieAdapter(val clickListener: MoviesListFragment.Callbacks?) :
+class MovieAdapter(val clickListener: MoviesListFragment.Callbacks?, val listEndedHandler: Callbacks) :
     RecyclerView.Adapter<MovieAdapter.FilmListItemViewHolder>() {
 
     private var filmsList = listOf<Movie>()
+
+    interface Callbacks {
+        fun onListEnded()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilmListItemViewHolder {
         val view: View =
@@ -32,6 +37,9 @@ class MovieAdapter(val clickListener: MoviesListFragment.Callbacks?) :
         holder.itemView.setOnClickListener {
             clickListener?.onFilmSelectedClick(bindingMovie.id)
         }
+
+        if (position == filmsList.size - 1) listEndedHandler.onListEnded()
+        //Log.d("MovieAdapter", "end of list. position: $position")
     }
 
     override fun getItemCount(): Int {

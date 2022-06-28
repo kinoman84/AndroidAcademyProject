@@ -20,29 +20,22 @@ import java.util.concurrent.TimeUnit
 class JsonMovieRepository(private val context: Context) : MovieRepository {
     private val jsonFormat = Json { ignoreUnknownKeys = true }
 
-    private var movies: List<Movie>? = null
+    private var movies: List<Movie> = emptyList()
+    private var page: Int = 1
+    private var genresMapCash: Map<Int, Genre>? = null
 
     override suspend fun loadMovies(): List<Movie> = withContext(Dispatchers.IO) {
-        val cachedMovies = movies
-        if (cachedMovies != null) {
-            cachedMovies
-        } else {
-            //val moviesFromJson = loadMoviesFromJsonFile()
-            val moviesFromJson = loadMoviesFromApi()
-            movies = moviesFromJson
-            moviesFromJson
-        }
+        val moviesFromJson = loadMoviesFromApi(page)
+        page++
+        movies = movies.plus(moviesFromJson)
+        movies
     }
 
-    private suspend fun loadMoviesFromApi(): List<Movie> {
+    private suspend fun loadMoviesFromApi(page: Int): List<Movie> {
 
-        val response: JsonMovieResponse = RetrofitModule.movieApi.getPopularMovies()
-        val genresResponse: JsonGenresResponse = RetrofitModule.movieApi.getGenres()
+        val response: JsonMovieResponse = RetrofitModule.movieApi.getPopularMovies(page)
 
-
-        val genres: List<Genre> = genresResponse.genres.map { jsonGenre -> Genre(id = jsonGenre.id, name = jsonGenre.name) }
-
-        val genresMap = genres.associateBy(Genre::id)
+        val genresMap = loadGenresMap()
 
         val movieList = response.results?.map { jsonMovie ->
 
@@ -51,7 +44,7 @@ class JsonMovieRepository(private val context: Context) : MovieRepository {
                 title = jsonMovie.title,
                 storyLine = jsonMovie.overview,
                 imageUrl = jsonMovie.posterPicture,
-                detailImageUrl = jsonMovie.backdropPicture,
+                //detailImageUrl = jsonMovie.backdropPicture,
                 rating = (jsonMovie.ratings / 2).toInt(),
                 reviewCount = jsonMovie.votesCount,
                 pgAge = if (jsonMovie.adult) 16 else 13,
@@ -113,6 +106,20 @@ class JsonMovieRepository(private val context: Context) : MovieRepository {
         return parseMovies(data, genresMap, actorsMap)
     }
 
+    private suspend fun loadGenresMap(): Map<Int, Genre> = withContext(Dispatchers.IO) {
+
+        if (genresMapCash != null) {
+            genresMapCash as Map<Int, Genre>
+        } else {
+            val genresResponse: JsonGenresResponse = RetrofitModule.movieApi.getGenres()
+            val genres: List<Genre> = genresResponse.genres.map { jsonGenre -> Genre(id = jsonGenre.id, name = jsonGenre.name) }
+            //val genres : List<Genre> = if (genresCash.isEmpty()) {genresCash} else {genresCash
+            val genresMap = genres.associateBy(Genre::id)
+            genresMapCash = genresMap
+            genresMap
+        }
+    }
+
     private suspend fun loadGenres(): List<Genre> = withContext(Dispatchers.IO) {
         val data = readAssetFileToString("genres.json")
         val jsonGenres = jsonFormat.decodeFromString<List<JsonGenre>>(data)
@@ -153,7 +160,7 @@ class JsonMovieRepository(private val context: Context) : MovieRepository {
                 title = jsonMovie.title,
                 storyLine = jsonMovie.overview,
                 imageUrl = jsonMovie.posterPicture,
-                detailImageUrl = jsonMovie.backdropPicture,
+//                detailImageUrl = jsonMovie.backdropPicture,
                 rating = (jsonMovie.ratings / 2).toInt(),
                 reviewCount = jsonMovie.votesCount,
                 pgAge = if (jsonMovie.adult) 16 else 13,

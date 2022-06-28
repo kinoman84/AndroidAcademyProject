@@ -4,11 +4,14 @@ import com.android.academy.fundamentals.homework.data.JsonMovie
 import com.android.academy.fundamentals.homework.data.JsonMovieDetails
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface MovieApi {
     //TODO убрать ключи
-    @GET("movie/popular?api_key=e78f70bf9b2c2d41f9e21e9a48553feb&language=en-US&page=1")
-    suspend fun getPopularMovies(): JsonMovieResponse
+    @GET("movie/popular?api_key=e78f70bf9b2c2d41f9e21e9a48553feb&language=en-US")
+    suspend fun getPopularMovies(
+        @Query("page") page: Int
+    ): JsonMovieResponse
 
     @GET("movie/{movie_id}?api_key=e78f70bf9b2c2d41f9e21e9a48553feb&language=en-US")
     suspend fun getMovieDetails(

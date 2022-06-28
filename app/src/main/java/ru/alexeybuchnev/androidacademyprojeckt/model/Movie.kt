@@ -5,7 +5,7 @@ data class Movie(
     var title: String,
     var storyLine: String,
     var imageUrl: String,
-    var detailImageUrl: String,
+    var detailImageUrl: String = "null",
     var rating: Int,
     var reviewCount: Int,
     var pgAge: Int,

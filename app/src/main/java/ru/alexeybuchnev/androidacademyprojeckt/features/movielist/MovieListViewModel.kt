@@ -29,7 +29,6 @@ class MovieListViewModel (private val movieRepository: MovieRepository) : ViewMo
 
     fun loadMovies() {
 
-        //TODO add loader
         viewModelScope.launch(exceptionHandler) {
             stateLiveData.value = State.Loading()
 

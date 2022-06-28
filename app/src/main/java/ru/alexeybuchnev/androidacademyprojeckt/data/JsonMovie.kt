@@ -11,8 +11,8 @@ class JsonMovie(
     val title: String,
     @SerialName("poster_path")
     val posterPicture: String,
-    @SerialName("backdrop_path")
-    val backdropPicture: String,
+//    @SerialName("backdrop_path")
+//    val backdropPicture: String,
     @SerialName("runtime")
     val runtime: Int? = null,
     @SerialName("genre_ids")

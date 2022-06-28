@@ -27,4 +27,10 @@ class MovieDetailsViewModel(private val movieRepository: MovieRepository) : View
             movie?.let { mutableMovie.value = it }
         }
     }
+
+    sealed class State {
+        class Loading : State()
+        class Success : State()
+        class Error : State()
+    }
 }
