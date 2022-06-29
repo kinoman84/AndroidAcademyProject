@@ -6,8 +6,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.create
@@ -77,8 +80,8 @@ class JsonMovieRepository(private val context: Context) : MovieRepository {
             reviewCount = responseMove.votesCount,
             pgAge = if (responseMove.adult) 16 else 13,
             runningTime = responseMove.runtime?.toInt() ?: 0,
-            genres = responseMove.genreIds.map {
-                jsonGenre -> Genre(id = jsonGenre.id, name = jsonGenre.name)
+            genres = responseMove.genreIds.map { jsonGenre ->
+                Genre(id = jsonGenre.id, name = jsonGenre.name)
             },
             //TODO ограничить список до 10 актёров. убрать актёров без фото или сделать плэйсхолдер
             actors = casts.map { castItem ->
@@ -86,7 +89,8 @@ class JsonMovieRepository(private val context: Context) : MovieRepository {
                     id = castItem.id,
                     name = castItem.name,
                     imageUrl = castItem.profilePath ?: "null"
-                )},
+                )
+            },
             isLiked = false
         )
 
@@ -112,7 +116,12 @@ class JsonMovieRepository(private val context: Context) : MovieRepository {
             genresMapCash as Map<Int, Genre>
         } else {
             val genresResponse: JsonGenresResponse = RetrofitModule.movieApi.getGenres()
-            val genres: List<Genre> = genresResponse.genres.map { jsonGenre -> Genre(id = jsonGenre.id, name = jsonGenre.name) }
+            val genres: List<Genre> = genresResponse.genres.map { jsonGenre ->
+                Genre(
+                    id = jsonGenre.id,
+                    name = jsonGenre.name
+                )
+            }
             //val genres : List<Genre> = if (genresCash.isEmpty()) {genresCash} else {genresCash
             val genresMap = genres.associateBy(Genre::id)
             genresMapCash = genresMap
@@ -173,7 +182,7 @@ class JsonMovieRepository(private val context: Context) : MovieRepository {
 //                    actorsMap[id].orThrow { IllegalArgumentException("Actor not found") }
 //                },
                 genres = listOf(Genre(1, "name")),
-                actors = listOf(Actor(1,"name", "url")),
+                actors = listOf(Actor(1, "name", "url")),
                 isLiked = false
             )
         }
@@ -196,7 +205,7 @@ private object RetrofitModule {
         prettyPrint = true
     }
 
-    private val client : OkHttpClient = OkHttpClient()
+    private val client: OkHttpClient = OkHttpClient()
         .newBuilder()
         .connectTimeout(10, TimeUnit.SECONDS)
         .writeTimeout(30, TimeUnit.SECONDS)
@@ -204,6 +213,8 @@ private object RetrofitModule {
         .addInterceptor(HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         })
+        .addInterceptor(AddQueryParamInterceptor("api_key", "e78f70bf9b2c2d41f9e21e9a48553feb"))
+        .addInterceptor(AddQueryParamInterceptor("language", "en-US"))
         .build()
 
     private val retrofit: Retrofit = Retrofit.Builder()
@@ -213,4 +224,18 @@ private object RetrofitModule {
         .build()
 
     val movieApi: MovieApi = retrofit.create()
+}
+
+class AddQueryParamInterceptor(val name: String, val value: String) : Interceptor {
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val origin: Request = chain.request()
+        val request = origin.newBuilder()
+            .url(
+                origin.url.newBuilder()
+                    .addQueryParameter(name, value).build()
+            )
+            .build()
+
+        return chain.proceed(request)
+    }
 }

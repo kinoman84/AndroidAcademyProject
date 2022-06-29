@@ -8,21 +8,21 @@ import retrofit2.http.Query
 
 interface MovieApi {
     //TODO убрать ключи
-    @GET("movie/popular?api_key=e78f70bf9b2c2d41f9e21e9a48553feb&language=en-US")
+    @GET("movie/popular")
     suspend fun getPopularMovies(
         @Query("page") page: Int
     ): JsonMovieResponse
 
-    @GET("movie/{movie_id}?api_key=e78f70bf9b2c2d41f9e21e9a48553feb&language=en-US")
+    @GET("movie/{movie_id}")
     suspend fun getMovieDetails(
         @Path("movie_id") id: Int
     ): JsonMovieDetails
 
-    @GET("movie/{movie_id}/credits?api_key=e78f70bf9b2c2d41f9e21e9a48553feb&language=en-US")
+    @GET("movie/{movie_id}/credits")
     suspend fun getCredits(
         @Path("movie_id") id: Int
     ): CreditsResponse
 
-    @GET("genre/movie/list?api_key=e78f70bf9b2c2d41f9e21e9a48553feb&language=en-US")
+    @GET("genre/movie/list")
     suspend fun getGenres(): JsonGenresResponse
 }
