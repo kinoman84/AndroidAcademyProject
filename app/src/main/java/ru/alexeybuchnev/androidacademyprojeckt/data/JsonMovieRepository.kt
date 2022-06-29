@@ -14,6 +14,7 @@ import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.create
+import ru.alexeybuchnev.androidacademyprojeckt.BuildConfig
 import ru.alexeybuchnev.androidacademyprojeckt.data.*
 import ru.alexeybuchnev.androidacademyprojeckt.model.Actor
 import ru.alexeybuchnev.androidacademyprojeckt.model.Genre
@@ -213,7 +214,7 @@ private object RetrofitModule {
         .addInterceptor(HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         })
-        .addInterceptor(AddQueryParamInterceptor("api_key", "e78f70bf9b2c2d41f9e21e9a48553feb"))
+        .addInterceptor(AddQueryParamInterceptor("api_key", BuildConfig.apiKey))
         .addInterceptor(AddQueryParamInterceptor("language", "en-US"))
         .build()
 
