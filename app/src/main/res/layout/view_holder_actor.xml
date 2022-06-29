@@ -19,7 +19,7 @@
             android:id="@+id/actorImageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/actor_img_robert_downey_jr" />
+            tools:src="@drawable/ph_actor_in_list" />
     </androidx.cardview.widget.CardView>
 
     <TextView

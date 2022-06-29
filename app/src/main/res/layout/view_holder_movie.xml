@@ -20,7 +20,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/film_poster_avenges_end_game" />
+        tools:src="@drawable/ph_moive_in_list" />
 
     <View
         android:layout_width="0dp"

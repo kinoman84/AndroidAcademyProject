@@ -142,8 +142,8 @@ class MovieAdapter(val clickListener: MoviesListFragment.Callbacks?, val listEnd
 
         companion object {
             private val imageOption = RequestOptions()
-                .placeholder(R.drawable.film_poster_avenges_end_game)
-                .fallback(R.drawable.film_poster_avenges_end_game)
+                .placeholder(R.drawable.ph_moive_in_list)
+                .fallback(R.drawable.ph_moive_in_list)
                 .centerCrop()
         }
 

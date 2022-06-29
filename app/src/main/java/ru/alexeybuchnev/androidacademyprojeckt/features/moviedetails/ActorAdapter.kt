@@ -49,8 +49,8 @@ class ActorItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     companion object {
         //TODO переделать на использование COIL
         private val imageOption = RequestOptions()
-            .placeholder(R.drawable.actor_img_chris_evans)
-            .fallback(R.drawable.actor_img_chris_evans)
+            .placeholder(R.drawable.ph_actor_in_list)
+            .fallback(R.drawable.ph_actor_in_list)
             .centerCrop()
     }
 
