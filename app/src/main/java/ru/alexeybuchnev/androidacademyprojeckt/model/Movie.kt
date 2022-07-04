@@ -10,7 +10,7 @@ data class Movie(
     var reviewCount: Int,
     var pgAge: Int,
     var runningTime: Int,
-    var genres: List<Genre>,
+    var genres: List<Genre?>? = null,
     var actors: List<Actor>? = null,
     var isLiked: Boolean
 ) {

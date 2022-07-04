@@ -1,10 +1,10 @@
-package ru.alexeybuchnev.androidacademyprojeckt.data
+package ru.alexeybuchnev.androidacademyprojeckt.data.network.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CastItem(
+data class CreditsItemResponse(
 //    val castId: Int? = null,
 //    val character: String? = null,
 //    val gender: Int? = null,

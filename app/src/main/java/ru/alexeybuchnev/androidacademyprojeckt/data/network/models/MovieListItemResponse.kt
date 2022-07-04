@@ -1,10 +1,10 @@
-package com.android.academy.fundamentals.homework.data
+package ru.alexeybuchnev.androidacademyprojeckt.data.network.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-class JsonMovie(
+class MovieListItemResponse(
     @SerialName("id")
     val id: Int,
     @SerialName("title")
@@ -16,7 +16,7 @@ class JsonMovie(
     @SerialName("runtime")
     val runtime: Int? = null,
     @SerialName("genre_ids")
-    val genreIds: List<Int>,
+    val genreIds: List<Int>? = null,
     val actors: List<Int>? = null,
     @SerialName("vote_average")
     val ratings: Float,

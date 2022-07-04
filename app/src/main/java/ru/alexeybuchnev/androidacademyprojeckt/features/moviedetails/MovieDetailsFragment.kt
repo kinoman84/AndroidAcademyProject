@@ -9,10 +9,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.academy.fundamentals.homework.data.JsonMovieRepository
+import com.android.academy.fundamentals.homework.data.MovieRepositoryImpl
 import com.bumptech.glide.Glide
 import ru.alexeybuchnev.androidacademyprojeckt.ActorAdapter
 import ru.alexeybuchnev.androidacademyprojeckt.R
@@ -60,7 +59,7 @@ class FragmentMoviesDetails : Fragment() {
 
         val context: Context = requireContext()
         //TODO delete it after implement network
-        movieRepository = JsonMovieRepository(context)
+        movieRepository = MovieRepositoryImpl(context)
         //movieViewModel = MovieDetailsViewModel(movieRepository)
         movieViewModel = ViewModelProvider(
             this,
@@ -154,12 +153,15 @@ class FragmentMoviesDetails : Fragment() {
     }
 
     private fun getGenresString(selectedMovie: Movie): String {
-        var genresString: String = ""
+        var genresString = ""
 
-        for (genre in selectedMovie.genres) {
-            if (genresString == "") {
-                genresString = genresString.plus(genre.name)
-            } else genresString = genresString.plus(", ").plus(genre.name)
+        val genreList = selectedMovie.genres
+        genreList?.let {
+            for (genre in it) {
+                genresString = if (genresString == "") {
+                    genresString.plus(genre?.name)
+                } else genresString.plus(", ").plus(genre?.name)
+            }
         }
 
         return genresString

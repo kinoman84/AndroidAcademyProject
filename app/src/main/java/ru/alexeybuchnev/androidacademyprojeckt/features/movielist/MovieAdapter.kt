@@ -130,11 +130,11 @@ class MovieAdapter(val clickListener: MoviesListFragment.Callbacks?, val listEnd
 
         private fun getGenresString(): String {
             var genresString: String = ""
-
-            for (genre in movie.genres) {
+            //TODO обработать пустой список genre
+            for (genre in movie.genres!!) {
                 if (genresString == "") {
-                    genresString = genresString.plus(genre.name)
-                } else genresString = genresString.plus(", ").plus(genre.name)
+                    genresString = genresString.plus(genre?.name)
+                } else genresString = genresString.plus(", ").plus(genre?.name)
             }
 
             return genresString

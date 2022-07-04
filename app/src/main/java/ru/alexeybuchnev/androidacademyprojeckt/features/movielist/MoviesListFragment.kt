@@ -12,7 +12,7 @@ import android.widget.ProgressBar
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.academy.fundamentals.homework.data.JsonMovieRepository
+import com.android.academy.fundamentals.homework.data.MovieRepositoryImpl
 import ru.alexeybuchnev.androidacademyprojeckt.R
 import ru.alexeybuchnev.androidacademyprojeckt.data.MovieRepository
 import ru.alexeybuchnev.androidacademyprojeckt.model.Movie
@@ -49,7 +49,7 @@ class MoviesListFragment : Fragment(), MovieAdapter.Callbacks {
         initViews(view)
 
         //TODO delete it after implement network
-        movieRepository = JsonMovieRepository(requireContext())
+        movieRepository = MovieRepositoryImpl(requireContext())
         movieListViewModel = ViewModelProvider(
             this,
             MovieListViewModelFactory(movieRepository)
