@@ -13,41 +13,25 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.create
 import ru.alexeybuchnev.androidacademyprojeckt.BuildConfig
-import ru.alexeybuchnev.androidacademyprojeckt.data.network.models.GenresListResponse
+import ru.alexeybuchnev.androidacademyprojeckt.data.network.models.*
 import ru.alexeybuchnev.androidacademyprojeckt.model.Genre
 import ru.alexeybuchnev.androidacademyprojeckt.model.Movie
 import java.util.concurrent.TimeUnit
 
-class NetworkMovieRepositoryImpl: NetworkMovieRepository {
+class NetworkMovieRepositoryImpl: NetworkDataSource {
 
-    private var genresList: List<Genre>? = null
+    override suspend fun loadMovies(): List<MovieListItemResponse> {
+        val response: MovieListResponse = RetrofitModule.movieApi.getPopularMovies(1)
+        return response.results.orEmpty()
+    }
 
-    override suspend fun loadMovies(): List<Movie> {
+    override suspend fun loadMovieDetails(movieId: Int): MovieDetailsResponse {
         TODO("Not yet implemented")
     }
 
-    override suspend fun loadMovie(movieId: Int): Movie? {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getGenre(id: Int): Genre? {
-        if (genresList == null) {
-            genresList = loadGenres()
-        }
-
-        return genresList?.find { it.id == id }
-    }
-
-    override suspend fun loadGenres(): List<Genre> = withContext(Dispatchers.IO) {
-
+    override suspend fun loadGenres(): List<GenreListItemResponse> = withContext(Dispatchers.IO) {
         val genresResponse: GenresListResponse = RetrofitModule.movieApi.getGenres()
-        val genres: List<Genre> = genresResponse.genres.map { jsonGenre ->
-            Genre(
-                id = jsonGenre.id,
-                name = jsonGenre.name
-            )
-        }
-        genres
+        genresResponse.genres
     }
 }
 

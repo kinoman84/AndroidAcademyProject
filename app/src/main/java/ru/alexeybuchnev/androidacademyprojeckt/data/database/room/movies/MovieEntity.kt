@@ -1,10 +1,12 @@
-package ru.alexeybuchnev.androidacademyprojeckt.data.network.models
+package ru.alexeybuchnev.androidacademyprojeckt.data.database.room.movies
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+class MovieEntity {
+}
 
-@Serializable
-class MovieDetailsResponse(
+
+/*
+
+class MovieListItemResponse(
     @SerialName("id")
     val id: Int,
     @SerialName("title")
@@ -15,8 +17,8 @@ class MovieDetailsResponse(
     val backdropPicture: String? = null,
     @SerialName("runtime")
     val runtime: Int? = null,
-    @SerialName("genres")
-    val genreIds: List<GenreListItemResponse>,
+    @SerialName("genre_ids")
+    val genreIds: List<Int>,
     @SerialName("vote_average")
     val ratings: Float,
     @SerialName("vote_count")
@@ -26,3 +28,5 @@ class MovieDetailsResponse(
     @SerialName("adult")
     val adult: Boolean
 )
+
+ */

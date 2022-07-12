@@ -1,8 +1,9 @@
-package ru.alexeybuchnev.androidacademyprojeckt.data.database.genres
+package ru.alexeybuchnev.androidacademyprojeckt.data.database.room.genres
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 import ru.alexeybuchnev.androidacademyprojeckt.data.database.Contract
 
 @Entity(tableName = Contract.Genres.TABLE_NAME)

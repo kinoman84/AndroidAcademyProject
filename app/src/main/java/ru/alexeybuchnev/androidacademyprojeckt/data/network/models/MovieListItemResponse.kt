@@ -3,6 +3,10 @@ package ru.alexeybuchnev.androidacademyprojeckt.data.network.models
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * https://developers.themoviedb.org/3/movies/get-popular-movies
+ */
+
 @Serializable
 class MovieListItemResponse(
     @SerialName("id")
@@ -11,13 +15,8 @@ class MovieListItemResponse(
     val title: String,
     @SerialName("poster_path")
     val posterPicture: String,
-//    @SerialName("backdrop_path")
-//    val backdropPicture: String,
-    @SerialName("runtime")
-    val runtime: Int? = null,
     @SerialName("genre_ids")
-    val genreIds: List<Int>? = null,
-    val actors: List<Int>? = null,
+    val genreIds: List<Int>,
     @SerialName("vote_average")
     val ratings: Float,
     @SerialName("vote_count")

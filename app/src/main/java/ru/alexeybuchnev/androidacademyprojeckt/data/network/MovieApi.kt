@@ -9,7 +9,6 @@ import ru.alexeybuchnev.androidacademyprojeckt.data.network.models.GenresListRes
 import ru.alexeybuchnev.androidacademyprojeckt.data.network.models.MovieListResponse
 
 interface MovieApi {
-    //TODO убрать ключи
     @GET("movie/popular")
     suspend fun getPopularMovies(
         @Query("page") page: Int

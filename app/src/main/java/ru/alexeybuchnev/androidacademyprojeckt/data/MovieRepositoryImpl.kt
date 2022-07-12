@@ -16,10 +16,11 @@ import retrofit2.Retrofit
 import retrofit2.create
 import ru.alexeybuchnev.androidacademyprojeckt.BuildConfig
 import ru.alexeybuchnev.androidacademyprojeckt.data.*
-import ru.alexeybuchnev.androidacademyprojeckt.data.database.MoviesDatabase
-import ru.alexeybuchnev.androidacademyprojeckt.data.database.genres.GenreEntity
+import ru.alexeybuchnev.androidacademyprojeckt.data.database.LocalDataSourceImpl
+import ru.alexeybuchnev.androidacademyprojeckt.data.database.LocalDataStorage
+import ru.alexeybuchnev.androidacademyprojeckt.data.database.room.genres.GenreEntity
 import ru.alexeybuchnev.androidacademyprojeckt.data.network.MovieApi
-import ru.alexeybuchnev.androidacademyprojeckt.data.network.NetworkMovieRepository
+import ru.alexeybuchnev.androidacademyprojeckt.data.network.NetworkDataSource
 import ru.alexeybuchnev.androidacademyprojeckt.data.network.NetworkMovieRepositoryImpl
 import ru.alexeybuchnev.androidacademyprojeckt.data.network.models.*
 import ru.alexeybuchnev.androidacademyprojeckt.model.Actor
@@ -27,56 +28,29 @@ import ru.alexeybuchnev.androidacademyprojeckt.model.Genre
 import ru.alexeybuchnev.androidacademyprojeckt.model.Movie
 import java.util.concurrent.TimeUnit
 
+/**
+ * прочитать:https://habr.com/ru/post/456256/
+ */
+
 class MovieRepositoryImpl(private val context: Context) : MovieRepository {
     private val jsonFormat = Json { ignoreUnknownKeys = true }
 
     private var movies: List<Movie> = emptyList()
     private var page: Int = 1
     private var genresMapCash: Map<Int, Genre>? = null
-    private var genresList: List<Genre>? = null
 
-
-    private val networkRepository: NetworkMovieRepository = NetworkMovieRepositoryImpl()
-    private val movieDatabase: MoviesDatabase = MoviesDatabase.createDd(context)
+    private val networkRepository: NetworkDataSource = NetworkMovieRepositoryImpl()
+    private val movieDatabase: LocalDataStorage = LocalDataSourceImpl(context)
 
     override suspend fun loadMovies(): List<Movie> = withContext(Dispatchers.IO) {
-        val moviesFromJson = loadMoviesFromApi(page)
+        /*val moviesFromJson = loadMoviesFromApi(page)
         page++
         movies = movies.plus(moviesFromJson)
-        movies
-    }
-
-    private suspend fun loadMoviesFromApi(page: Int): List<Movie> {
-
-        val response: MovieListResponse = RetrofitModule.movieApi.getPopularMovies(page)
-
-        val genresList = loadGenres()
-
-        val movieList = response.results?.map { jsonMovie ->
-
-            Movie(
-                id = jsonMovie.id,
-                title = jsonMovie.title,
-                storyLine = jsonMovie.overview,
-                imageUrl = jsonMovie.posterPicture,
-                //detailImageUrl = jsonMovie.backdropPicture,
-                rating = (jsonMovie.ratings / 2).toInt(),
-                reviewCount = jsonMovie.votesCount,
-                pgAge = if (jsonMovie.adult) 16 else 13,
-                runningTime = jsonMovie.runtime?.toInt() ?: 0,
-                genres = jsonMovie.genreIds?.map { id ->
-                    //genresMap[id].orThrow { IllegalArgumentException("Genre not found") }
-                    //TODO локально список хранить и получать его из БД или из сети
-                    genresList?.find { it.id == id }
-                    //networkRepository.getGenre(id)
-                },
-                isLiked = false
-            )
-
-        }
-
-        return movieList ?: emptyList()
-
+        movies*/
+        //TODO вернуть пагинацию
+        val genres = loadGenres()
+        val networkList = networkRepository.loadMovies()
+        networkList.map { toMovie(it, genres) }
     }
 
     private suspend fun loadMovieFromApi(id: Int): Movie {
@@ -136,37 +110,15 @@ class MovieRepositoryImpl(private val context: Context) : MovieRepository {
         }
     }
 
-    private suspend fun loadGenres(): List<Genre>? = withContext(Dispatchers.IO) {
-        //TODO какая-то хрень. Где нужно преобразовывать объекты ?
-        //В оьщем, репозиторий приводид к формату основному. источники используют свои форматы и не знают об ощей модели и о репозитории
-        if (genresList != null) {
-            genresList
-        } else {
-            val genresEntity = movieDatabase.genreDao.getAllGenres()
-            if (genresEntity.isNotEmpty()) {
-                genresEntity.map { genreEntity ->
-                    Genre(
-                        id = genreEntity.id,
-                        name = genreEntity.name
-                    )
-                }
-            } else {
-                val genresLisfFromApi = networkRepository.loadGenres()
-                movieDatabase.genreDao.addGenres(
-                    genresLisfFromApi.map { genre: Genre ->
-                        GenreEntity(
-                            id = genre.id,
-                            name = genre.name
-                        )
-                    }
-                )
-                genresLisfFromApi
-            }
-        }
+    private suspend fun loadGenres(): List<Genre> = withContext(Dispatchers.IO) {
 
-        /*val data = readAssetFileToString("genres.json")
-        val genreListItemResponses = jsonFormat.decodeFromString<List<GenreListItemResponse>>(data)
-        genreListItemResponses.map { jsonGenre -> Genre(id = jsonGenre.id, name = jsonGenre.name) }*/
+        var genreList: List<Genre> = movieDatabase.gatGenres().map { toGenre(it) }
+        if (genreList.isEmpty()) {
+            val genresFromApi = networkRepository.loadGenres().map { toGenre(it) }
+            genreList = genresFromApi
+            movieDatabase.saveGenres(genresFromApi.map { toGenreEntity(it) })
+        }
+        genreList
     }
 
     private fun readAssetFileToString(fileName: String): String {
@@ -231,6 +183,44 @@ class MovieRepositoryImpl(private val context: Context) : MovieRepository {
 
     private fun <T : Any> T?.orThrow(createThrowable: () -> Throwable): T {
         return this ?: throw createThrowable()
+    }
+
+    /**
+     * мапперы
+     */
+
+    private fun toGenre(entity: GenreEntity): Genre {
+        return Genre(id = entity.id, name = entity.name)
+    }
+
+    private fun toGenreEntity(genre: Genre): GenreEntity {
+        return GenreEntity(id = genre.id, name = genre.name)
+    }
+
+    private fun toGenre(genreResponse: GenreListItemResponse): Genre {
+        return Genre(id = genreResponse.id, name = genreResponse.name)
+    }
+
+    private fun toMovie(movieItemResponse: MovieListItemResponse, genres: List<Genre>): Movie {
+
+        val filmGenres: List<Genre> = movieItemResponse.genreIds.map {
+                id ->
+            genres.find { it.id == id }.orThrow { IllegalArgumentException("Genre not found") }
+        }
+
+        return Movie(
+            id = movieItemResponse.id,
+            title = movieItemResponse.title,
+            storyLine = movieItemResponse.overview,
+            imageUrl = movieItemResponse.posterPicture,
+            rating = (movieItemResponse.ratings / 2).toInt(),
+            reviewCount = movieItemResponse.votesCount,
+            pgAge = if (movieItemResponse.adult) 16 else 13,
+            genres = filmGenres,
+            actors = emptyList(),
+            runningTime = 0,
+            isLiked = false
+        )
     }
 }
 

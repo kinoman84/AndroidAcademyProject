@@ -1,4 +1,4 @@
-package ru.alexeybuchnev.androidacademyprojeckt.data.database.genres
+package ru.alexeybuchnev.androidacademyprojeckt.data.database.room.genres
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -11,5 +11,5 @@ interface GenreDao {
     suspend fun getAllGenres(): List<GenreEntity>
 
     @Insert
-    suspend fun addGenres(genres: List<GenreEntity>)
+    suspend fun saveGenres(genres: List<GenreEntity>)
 }
