@@ -2,8 +2,7 @@ package com.android.academy.fundamentals.homework.data
 
 import android.content.Context
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
@@ -19,6 +18,9 @@ import ru.alexeybuchnev.androidacademyprojeckt.data.*
 import ru.alexeybuchnev.androidacademyprojeckt.data.database.LocalDataSourceImpl
 import ru.alexeybuchnev.androidacademyprojeckt.data.database.LocalDataStorage
 import ru.alexeybuchnev.androidacademyprojeckt.data.database.room.genres.GenreEntity
+import ru.alexeybuchnev.androidacademyprojeckt.data.database.room.movies.MovieEntity
+import ru.alexeybuchnev.androidacademyprojeckt.data.database.room.movies.MovieGenreCrossRef
+import ru.alexeybuchnev.androidacademyprojeckt.data.database.room.movies.MovieWithGenres
 import ru.alexeybuchnev.androidacademyprojeckt.data.network.MovieApi
 import ru.alexeybuchnev.androidacademyprojeckt.data.network.NetworkDataSource
 import ru.alexeybuchnev.androidacademyprojeckt.data.network.NetworkMovieRepositoryImpl
@@ -48,9 +50,76 @@ class MovieRepositoryImpl(private val context: Context) : MovieRepository {
         movies = movies.plus(moviesFromJson)
         movies*/
         //TODO вернуть пагинацию
+        //TODO надовозвращать лайф дату наверное. тогда сразу можно вернуть кэш и после обновления, обновить UI
         val genres = loadGenres()
-        val networkList = networkRepository.loadMovies()
-        networkList.map { toMovie(it, genres) }
+        var movieEntityList = movieDatabase.getMoviesWithGenres()
+
+        if (movieEntityList.isNotEmpty()) {
+
+            CoroutineScope(Dispatchers.IO).launch {
+                delay(5000)
+                val networkList = networkRepository.loadMovies()
+                val moviesList = networkList.map { toMovie(it, genres) }
+
+                for (movie in moviesList) {
+                    saveMovieWithGenreRef(movie)
+                }
+            }
+
+            movieEntityList.map { toMovie(it) }
+        } else {
+            val networkList = networkRepository.loadMovies()
+            val moviesList = networkList.map { toMovie(it, genres) }
+
+            for (movie in moviesList) {
+                saveMovieWithGenreRef(movie)
+            }
+            moviesList
+        }
+
+/*        if (movieEntityList.isEmpty()) {
+            val networkList = networkRepository.loadMovies()
+            val moviesList = networkList.map { toMovie(it, genres) }
+
+            for (movie in moviesList) {
+                saveMovieWithGenreRef(movie)
+            }
+
+            movieEntityList = movieDatabase.getMoviesWithGenres()
+        }
+        movieEntityList.map { toMovie(it) }*/
+    }
+
+    private fun toMovie(movieEntityWithGenres: MovieWithGenres): Movie {
+        return Movie(
+            id = movieEntityWithGenres.movie.id,
+            title = movieEntityWithGenres.movie.title,
+            storyLine = movieEntityWithGenres.movie.overview,
+            imageUrl = movieEntityWithGenres.movie.posterPath,
+            rating = movieEntityWithGenres.movie.rating,
+            reviewCount = movieEntityWithGenres.movie.voteCount,
+            pgAge = movieEntityWithGenres.movie.pgAge,
+            runningTime = movieEntityWithGenres.movie.runtime ?: 0,
+            genres = movieEntityWithGenres.genres.map { Genre(it.id, it.name) },
+            detailImageUrl = null,
+            isLiked = false
+        )
+    }
+
+    private suspend fun saveMovieWithGenreRef(movie: Movie) {
+        val genreRefsList = movie.genres.map { MovieGenreCrossRef(movie.id, it.id) }
+        val movieEntity = MovieEntity(
+            id = movie.id,
+            title = movie.title,
+            posterPath = movie.imageUrl,
+            backdropPath = null,
+            runtime = movie.runningTime,
+            rating = movie.rating,
+            voteCount = movie.reviewCount,
+            overview = movie.storyLine,
+            pgAge = movie.pgAge
+        )
+        movieDatabase.saveMovieWithGenresRef(movieEntity, genreRefsList)
     }
 
     private suspend fun loadMovieFromApi(id: Int): Movie {
@@ -203,8 +272,7 @@ class MovieRepositoryImpl(private val context: Context) : MovieRepository {
 
     private fun toMovie(movieItemResponse: MovieListItemResponse, genres: List<Genre>): Movie {
 
-        val filmGenres: List<Genre> = movieItemResponse.genreIds.map {
-                id ->
+        val filmGenres: List<Genre> = movieItemResponse.genreIds.map { id ->
             genres.find { it.id == id }.orThrow { IllegalArgumentException("Genre not found") }
         }
 
