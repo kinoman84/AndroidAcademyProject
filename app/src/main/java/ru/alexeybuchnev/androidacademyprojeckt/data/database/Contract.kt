@@ -17,12 +17,13 @@ object Contract {
 
         const val COLUMN_NAME_ID = "movie_id"
         const val COLUMN_NAME_TITLE = "title"
-        const val COLUMN_NAME_POSTER_PATH = "poster_path"
-        const val COLUMN_NAME_BACKDROP_PATH = "backdrop_path"
-        const val COLUMN_NAME_RUNTIME = "runtime"
+        const val COLUMN_NAME_STORY_LINE = "story_line"
+        const val COLUMN_NAME_IMAGE_URL = "image_url"
+        const val COLUMN_NAME_DETAIL_IMAGE_URL = "detail_image_url"
         const val COLUMN_NAME_RATING = "rating"
-        const val COLUMN_NAME_VOTE_COUNT = "vote_count"
-        const val COLUMN_NAME_OVERVIEW = "overview"
+        const val COLUMN_NAME_REVIEW_COUNT = "review_count"
         const val COLUMN_NAME_PG_AGE = "pg_age"
+        const val COLUMN_NAME_RUNTIME = "runtime"
+        const val COLUMN_IS_LIKE = "is_like"
     }
 }

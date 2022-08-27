@@ -40,87 +40,69 @@ class MovieRepositoryImpl(private val context: Context) : MovieRepository {
     private var movies: List<Movie> = emptyList()
     private var page: Int = 1
     private var genresMapCash: Map<Int, Genre>? = null
+    private var genres : List<Genre> = emptyList()
 
     private val networkRepository: NetworkDataSource = NetworkMovieRepositoryImpl()
     private val movieDatabase: LocalDataStorage = LocalDataSourceImpl(context)
 
     override suspend fun loadMovies(): List<Movie> = withContext(Dispatchers.IO) {
-        /*val moviesFromJson = loadMoviesFromApi(page)
-        page++
-        movies = movies.plus(moviesFromJson)
-        movies*/
-        //TODO вернуть пагинацию
-        //TODO надовозвращать лайф дату наверное. тогда сразу можно вернуть кэш и после обновления, обновить UI
-        val genres = loadGenres()
-        var movieEntityList = movieDatabase.getMoviesWithGenres()
+        //TODO надовозвращать лайф дату наверное.тогда сразу можно вернуть кэш и после обновления, обновить UI
+        if (genres.isEmpty()) {
+            genres = genres.plus(loadGenres())
+        }
+        //val genres = loadGenres()
+        if (movies.isEmpty()) {
+            movies = getMoviesFromLocalCash()
 
-        if (movieEntityList.isNotEmpty()) {
-
-            CoroutineScope(Dispatchers.IO).launch {
-                delay(5000)
-                val networkList = networkRepository.loadMovies()
+            //кэш пустой
+            if (movies.isEmpty()) {
+                val networkList = networkRepository.loadMovies(page)
                 val moviesList = networkList.map { toMovie(it, genres) }
+                movies = movies.plus(moviesList)
 
                 for (movie in moviesList) {
                     saveMovieWithGenreRef(movie)
                 }
             }
-
-            movieEntityList.map { toMovie(it) }
         } else {
-            val networkList = networkRepository.loadMovies()
+            val networkList = networkRepository.loadMovies(page)
             val moviesList = networkList.map { toMovie(it, genres) }
-
-            for (movie in moviesList) {
-                saveMovieWithGenreRef(movie)
-            }
-            moviesList
+            movies = movies.plus(moviesList)
         }
 
-/*        if (movieEntityList.isEmpty()) {
-            val networkList = networkRepository.loadMovies()
-            val moviesList = networkList.map { toMovie(it, genres) }
+        page++
+        movies
 
-            for (movie in moviesList) {
-                saveMovieWithGenreRef(movie)
+    }
+
+    private suspend fun getMoviesFromLocalCash(): List<Movie> {
+        var movies: List<Movie> = emptyList()
+        var movieEntityList = movieDatabase.getMoviesWithGenres()
+
+        if (movieEntityList.isNotEmpty()) {
+
+            //обновляем кэш
+            try {
+                CoroutineScope(Dispatchers.IO).launch {
+                    val networkList = networkRepository.loadMovies(1)
+                    val moviesList = networkList.map { toMovie(it, genres) }
+
+                    for (movie in moviesList) {
+                        saveMovieWithGenreRef(movie)
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
 
-            movieEntityList = movieDatabase.getMoviesWithGenres()
+
+            movies = movieEntityList.map { toMovie(it) }
         }
-        movieEntityList.map { toMovie(it) }*/
+
+        return movies
     }
 
-    private fun toMovie(movieEntityWithGenres: MovieWithGenres): Movie {
-        return Movie(
-            id = movieEntityWithGenres.movie.id,
-            title = movieEntityWithGenres.movie.title,
-            storyLine = movieEntityWithGenres.movie.overview,
-            imageUrl = movieEntityWithGenres.movie.posterPath,
-            rating = movieEntityWithGenres.movie.rating,
-            reviewCount = movieEntityWithGenres.movie.voteCount,
-            pgAge = movieEntityWithGenres.movie.pgAge,
-            runningTime = movieEntityWithGenres.movie.runtime ?: 0,
-            genres = movieEntityWithGenres.genres.map { Genre(it.id, it.name) },
-            detailImageUrl = null,
-            isLiked = false
-        )
-    }
 
-    private suspend fun saveMovieWithGenreRef(movie: Movie) {
-        val genreRefsList = movie.genres.map { MovieGenreCrossRef(movie.id, it.id) }
-        val movieEntity = MovieEntity(
-            id = movie.id,
-            title = movie.title,
-            posterPath = movie.imageUrl,
-            backdropPath = null,
-            runtime = movie.runningTime,
-            rating = movie.rating,
-            voteCount = movie.reviewCount,
-            overview = movie.storyLine,
-            pgAge = movie.pgAge
-        )
-        movieDatabase.saveMovieWithGenresRef(movieEntity, genreRefsList)
-    }
 
     private suspend fun loadMovieFromApi(id: Int): Movie {
 
@@ -187,6 +169,18 @@ class MovieRepositoryImpl(private val context: Context) : MovieRepository {
             genreList = genresFromApi
             movieDatabase.saveGenres(genresFromApi.map { toGenreEntity(it) })
         }
+
+        try {
+            CoroutineScope(Dispatchers.IO).launch {
+                val genresFromApi = networkRepository.loadGenres().map { toGenre(it) }
+                genreList = genresFromApi
+                movieDatabase.saveGenres(genresFromApi.map { toGenreEntity(it) })
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+
         genreList
     }
 
@@ -254,6 +248,22 @@ class MovieRepositoryImpl(private val context: Context) : MovieRepository {
         return this ?: throw createThrowable()
     }
 
+    private suspend fun saveMovieWithGenreRef(movie: Movie) {
+        val genreRefsList = movie.genres.map { MovieGenreCrossRef(movie.id, it.id) }
+        val movieEntity = MovieEntity(
+            id = movie.id,
+            title = movie.title,
+            imageUrl = movie.imageUrl,
+            detailImageUrl = null,
+            runningTime = movie.runningTime,
+            rating = movie.rating,
+            reviewCount = movie.reviewCount,
+            storyLine = movie.storyLine,
+            pgAge = movie.pgAge
+        )
+        movieDatabase.saveMovieWithGenresRef(movieEntity, genreRefsList)
+    }
+
     /**
      * мапперы
      */
@@ -290,6 +300,24 @@ class MovieRepositoryImpl(private val context: Context) : MovieRepository {
             isLiked = false
         )
     }
+
+    private fun toMovie(movieEntityWithGenres: MovieWithGenres): Movie {
+        return Movie(
+            id = movieEntityWithGenres.movie.id,
+            title = movieEntityWithGenres.movie.title,
+            storyLine = movieEntityWithGenres.movie.storyLine,
+            imageUrl = movieEntityWithGenres.movie.imageUrl,
+            rating = movieEntityWithGenres.movie.rating,
+            reviewCount = movieEntityWithGenres.movie.reviewCount,
+            pgAge = movieEntityWithGenres.movie.pgAge,
+            runningTime = movieEntityWithGenres.movie.runningTime ?: 0,
+            genres = movieEntityWithGenres.genres.map { Genre(it.id, it.name) },
+            detailImageUrl = null,
+            isLiked = false
+        )
+    }
+
+
 }
 
 private object RetrofitModule {

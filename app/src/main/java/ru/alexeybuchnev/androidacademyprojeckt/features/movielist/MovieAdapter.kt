@@ -38,8 +38,7 @@ class MovieAdapter(val clickListener: MoviesListFragment.Callbacks?, val listEnd
             clickListener?.onFilmSelectedClick(bindingMovie.id)
         }
 
-        //TODO restore
-        //if (position == filmsList.size - 1) listEndedHandler.onListEnded()
+        if (position == filmsList.size - 1) listEndedHandler.onListEnded()
         //Log.d("MovieAdapter", "end of list. position: $position")
     }
 

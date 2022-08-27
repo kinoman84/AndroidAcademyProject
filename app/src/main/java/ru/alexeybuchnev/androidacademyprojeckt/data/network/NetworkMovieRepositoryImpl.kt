@@ -20,8 +20,8 @@ import java.util.concurrent.TimeUnit
 
 class NetworkMovieRepositoryImpl: NetworkDataSource {
 
-    override suspend fun loadMovies(): List<MovieListItemResponse> {
-        val response: MovieListResponse = RetrofitModule.movieApi.getPopularMovies(1)
+    override suspend fun loadMovies(page: Int): List<MovieListItemResponse> {
+        val response: MovieListResponse = RetrofitModule.movieApi.getPopularMovies(page)
         return response.results.orEmpty()
     }
 
